@@ -1,21 +1,25 @@
 import React, { useState } from 'react'
 import { account } from '@/lib/appwrite';
 import { toast } from 'sonner';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { FaLock } from 'react-icons/fa';
+import { FaLock, FaEye, FaEyeSlash } from 'react-icons/fa';
 import { AuthHeader } from '@/components/AuthHeader';
 import { Loader } from '@/components/Loader';
 
 function Login() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const navigate = useNavigate();
+  const {state} = useLocation();
+
+  const [email, setEmail] = useState(state?.email || '');
+  const [password, setPassword] = useState(state?.password || '');
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const navigate = useNavigate();
+  
 
   const loginHandler = async (e) => {
     setLoading(true);
@@ -36,6 +40,20 @@ function Login() {
       setLoading(false);
     }
     
+  }
+
+  const passwordResetHandler  = async () => {
+    try {
+      const response = account.createRecovery({
+        email,
+        url : `${import.meta.env.VITE_BASE_URL}/reset-password`
+      })
+      toast("Password reset link sent to your email")
+      console.log("Response: ", response);
+      
+    } catch (error) {
+      toast("Password reset failed")
+    }
   }
   
   return (
@@ -69,19 +87,34 @@ function Login() {
                 </div>
                 <div className="flex flex-col gap-1.5">
                   <Label htmlFor="password" className="text-neutral-200">Password</Label>
-                  <Input
-                    id="password"
-                    type="password"
-                    placeholder="••••••••"
-                    autoComplete="current-password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    className="border-neutral-700 bg-neutral-900/50 text-white placeholder:text-neutral-500 focus:border-red-500 focus:ring-2 focus:ring-red-500/50 focus:shadow-[0_0_15px_rgba(239,68,68,0.3)]"
-                  />
+                  <div className="relative">
+                    <Input
+                      id="password"
+                      type={showPassword ? "text" : "password"}
+                      placeholder="••••••••"
+                      autoComplete="current-password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                      minLength={8}
+                      className="border-neutral-700 bg-neutral-900/50 text-white placeholder:text-neutral-500 focus:border-red-500 focus:ring-2 focus:ring-red-500/50 focus:shadow-[0_0_15px_rgba(239,68,68,0.3)] pr-10"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-red-400 transition-colors"
+                    >
+                      {showPassword ? <FaEyeSlash className="h-4 w-4" /> : <FaEye className="h-4 w-4" />}
+                    </button>
+                  </div>
+                  {password && password.length < 8 && (
+                    <p className="text-xs text-red-400">Password must be at least 8 characters</p>
+                  )}
                 </div>
                 <div className="flex items-center justify-between text-sm">
-                  <Button type="button" variant="link" size="sm" className="h-auto p-0 text-red-400 hover:text-red-300 hover:drop-shadow-[0_0_8px_rgba(239,68,68,0.6)]">
+                  <Button
+                    onClick={passwordResetHandler}
+                    type="button" variant="link" size="sm" className="h-auto p-0 text-red-400 hover:text-red-300 hover:drop-shadow-[0_0_8px_rgba(239,68,68,0.6)]">
                     Forgot Password?
                   </Button>
                 </div>
