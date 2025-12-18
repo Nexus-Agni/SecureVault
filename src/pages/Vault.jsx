@@ -36,6 +36,10 @@ function Vault() {
   // Modal state
   const [showAddModal, setShowAddModal] = useState(false);
   const [showPasswordValue, setShowPasswordValue] = useState({});
+  const [showDetailsModal, setShowDetailsModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [selectedPassword, setSelectedPassword] = useState(null);
   
   // Form state
   const [formData, setFormData] = useState({
@@ -166,16 +170,24 @@ function Vault() {
     }
   };
 
-  // Note: UpdatePassword function will be implemented later
-  const updatePassword = async (passwordId, updatedData) => {
-    // TODO: Implement update functionality
-    console.log("Update password:", passwordId, updatedData);
-  };
 
-  // Note: DeletePassword function will be implemented later
   const deletePassword = async (passwordId) => {
-    // TODO: Implement delete functionality
-    console.log("Delete password:", passwordId);
+    try {
+      await tablesDB.deleteRow({
+        databaseId,
+        tableId,
+        rowId: passwordId
+      });
+      
+      setPasswords(passwords.filter(password => password.$id !== passwordId));
+      toast.success("Password deleted successfully");
+      setShowDeleteModal(false);
+      setShowDetailsModal(false);
+      setSelectedPassword(null);
+    } catch (error) {
+      console.error("Error deleting password:", error);
+      toast.error("Failed to delete password");
+    }
   };
 
   const copyToClipboard = (text, label) => {
@@ -194,6 +206,74 @@ function Vault() {
     const newPassword = generatePassword(16);
     setFormData({ ...formData, password: newPassword });
     toast.success("Strong password generated!");
+  };
+
+  const handleViewDetails = (password) => {
+    setSelectedPassword(password);
+    setShowDetailsModal(true);
+  };
+
+  const handleEditPassword = () => {
+    setFormData({
+      url: selectedPassword.url || '',
+      title: selectedPassword.title || '',
+      password: selectedPassword.password || '',
+      category: selectedPassword.category || 'other',
+      notes: selectedPassword.notes || ''
+    });
+    setShowDetailsModal(false);
+    setShowEditModal(true);
+  };
+
+  const handleUpdatePassword = async (e) => {
+    e.preventDefault();
+    
+    if (!formData.title || !formData.password) {
+      toast.error("Title and password are required");
+      return;
+    }
+
+    if (formData.password.length < 8) {
+      toast.error("Password must be at least 8 characters");
+      return;
+    }
+
+    try {
+      const response = await tablesDB.updateRow({
+        databaseId,
+        tableId,
+        rowId: selectedPassword.$id,
+        data: {
+          url: formData.url,
+          title: formData.title,
+          password: formData.password,
+          category: formData.category,
+          notes: formData.notes
+        }
+      });
+
+      setPasswords(passwords.map(password => 
+        password.$id === selectedPassword.$id ? response : password
+      ));
+      toast.success("Password updated successfully");
+      setShowEditModal(false);
+      setSelectedPassword(null);
+      setFormData({
+        url: '',
+        title: '',
+        password: '',
+        category: 'other',
+        notes: ''
+      });
+    } catch (error) {
+      console.error("Error updating password:", error);
+      toast.error("Failed to update password");
+    }
+  };
+
+  const handleDeleteConfirmation = () => {
+    setShowDetailsModal(false);
+    setShowDeleteModal(true);
   };
 
   // Pagination
@@ -368,7 +448,10 @@ function Vault() {
                     >
                       {/* More Options Button */}
                       <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button className="text-stone-400 hover:text-white p-1 rounded hover:bg-stone-800">
+                        <button 
+                          onClick={() => handleViewDetails(item)}
+                          className="text-stone-400 hover:text-white p-1 rounded hover:bg-stone-800"
+                        >
                           <FaEllipsisH />
                         </button>
                       </div>
@@ -666,6 +749,354 @@ function Vault() {
                 </Button>
               </div>
             </form>
+          </Card>
+        </div>
+      )}
+
+      {/* Password Details Modal */}
+      {showDetailsModal && selectedPassword && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <Card className="w-full max-w-lg bg-linear-to-br from-stone-900/95 via-black/95 to-stone-900/95 border-stone-700 p-6 max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold text-white flex items-center gap-2">
+                <FaLock className="text-red-500" />
+                Password Details
+              </h2>
+              <button
+                onClick={() => {
+                  setShowDetailsModal(false);
+                  setSelectedPassword(null);
+                }}
+                className="text-stone-400 hover:text-white transition-colors"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              {/* Title */}
+              <div>
+                <Label className="text-stone-500 text-xs uppercase">Title</Label>
+                <p className="text-white text-lg font-semibold mt-1">{selectedPassword.title}</p>
+              </div>
+
+              {/* Category */}
+              <div>
+                <Label className="text-stone-500 text-xs uppercase">Category</Label>
+                <div className="flex items-center gap-2 mt-1">
+                  <span className="text-2xl">{getCategoryIcon(selectedPassword.category)}</span>
+                  <p className="text-white capitalize">{selectedPassword.category}</p>
+                </div>
+              </div>
+
+              {/* URL */}
+              {selectedPassword.url && (
+                <div>
+                  <Label className="text-stone-500 text-xs uppercase">Website URL</Label>
+                  <div className="flex items-center gap-2 mt-1">
+                    <p className="text-white flex-1 truncate">{selectedPassword.url}</p>
+                    <button
+                      onClick={() => copyToClipboard(selectedPassword.url, 'URL')}
+                      className="text-stone-400 hover:text-red-500 transition-colors p-2 rounded hover:bg-stone-800"
+                    >
+                      <FaCopy />
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* Password */}
+              <div>
+                <Label className="text-stone-500 text-xs uppercase">Password</Label>
+                <div className="flex items-center gap-2 mt-1 bg-stone-950/50 border border-stone-700 rounded-lg p-3">
+                  <p className="text-white flex-1 font-mono tracking-wider">
+                    {showPasswordValue[selectedPassword.$id] ? selectedPassword.password : '••••••••••••'}
+                  </p>
+                  <button
+                    onClick={() => togglePasswordVisibility(selectedPassword.$id)}
+                    className="text-stone-400 hover:text-white transition-colors p-2 rounded hover:bg-stone-800"
+                  >
+                    {showPasswordValue[selectedPassword.$id] ? <FaEyeSlash /> : <FaEye />}
+                  </button>
+                  <button
+                    onClick={() => copyToClipboard(selectedPassword.password, 'Password')}
+                    className="text-stone-400 hover:text-red-500 transition-colors p-2 rounded hover:bg-stone-800"
+                  >
+                    <FaCopy />
+                  </button>
+                </div>
+                {/* Password Strength */}
+                {(() => {
+                  const strength = calculatePasswordStrength(selectedPassword.password);
+                  return (
+                    <div className="flex items-center gap-2 mt-2">
+                      <div className="flex-1 h-2 bg-stone-700 rounded-full overflow-hidden">
+                        <div 
+                          className={`h-full ${
+                            strength.color === 'green' ? 'bg-green-500' :
+                            strength.color === 'yellow' ? 'bg-yellow-500' :
+                            'bg-red-500'
+                          }`}
+                          style={{ width: `${strength.percentage}%` }}
+                        ></div>
+                      </div>
+                      <span className={`text-sm font-medium ${
+                        strength.color === 'green' ? 'text-green-500' :
+                        strength.color === 'yellow' ? 'text-yellow-500' :
+                        'text-red-500'
+                      }`}>
+                        {strength.displayText}
+                      </span>
+                    </div>
+                  );
+                })()}
+              </div>
+
+              {/* Notes */}
+              {selectedPassword.notes && (
+                <div>
+                  <Label className="text-stone-500 text-xs uppercase">Notes</Label>
+                  <p className="text-white mt-1 bg-stone-950/50 border border-stone-700 rounded-lg p-3 whitespace-pre-wrap">
+                    {selectedPassword.notes}
+                  </p>
+                </div>
+              )}
+
+              {/* Created Date */}
+              <div>
+                <Label className="text-stone-500 text-xs uppercase">Created</Label>
+                <p className="text-stone-400 text-sm mt-1">
+                  {new Date(selectedPassword.$createdAt).toLocaleString()}
+                </p>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex gap-3 pt-4 border-t border-stone-700">
+                <Button
+                  onClick={handleEditPassword}
+                  className="flex-1 bg-blue-600 hover:bg-blue-700 text-white rounded-full h-10"
+                >
+                  <FaKey className="mr-2" />
+                  Edit Password
+                </Button>
+                <Button
+                  onClick={handleDeleteConfirmation}
+                  className="flex-1 bg-red-600 hover:bg-red-700 text-white rounded-full h-10"
+                >
+                  <FaTrash className="mr-2" />
+                  Delete
+                </Button>
+              </div>
+            </div>
+          </Card>
+        </div>
+      )}
+
+      {/* Edit Password Modal */}
+      {showEditModal && selectedPassword && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <Card className="w-full max-w-lg bg-linear-to-br from-stone-900/95 via-black/95 to-stone-900/95 border-stone-700 p-6 max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold text-white flex items-center gap-2">
+                <FaKey className="text-blue-500" />
+                Edit Password
+              </h2>
+              <button
+                onClick={() => {
+                  setShowEditModal(false);
+                  setSelectedPassword(null);
+                  setFormData({
+                    url: '',
+                    title: '',
+                    password: '',
+                    category: 'other',
+                    notes: ''
+                  });
+                }}
+                className="text-stone-400 hover:text-white transition-colors"
+              >
+                ✕
+              </button>
+            </div>
+
+            <form onSubmit={handleUpdatePassword} className="space-y-4">
+              <div>
+                <Label htmlFor="edit-title" className="text-stone-300">Title *</Label>
+                <Input
+                  id="edit-title"
+                  type="text"
+                  placeholder="e.g., Netflix, Gmail, Bank Account"
+                  value={formData.title}
+                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                  required
+                  className="bg-stone-900/50 border-stone-700 text-white placeholder:text-stone-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50"
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="edit-url" className="text-stone-300">Website URL</Label>
+                <Input
+                  id="edit-url"
+                  type="text"
+                  placeholder="https://example.com"
+                  value={formData.url}
+                  onChange={(e) => setFormData({ ...formData, url: e.target.value })}
+                  className="bg-stone-900/50 border-stone-700 text-white placeholder:text-stone-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50"
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="edit-category" className="text-stone-300">Category</Label>
+                <select
+                  id="edit-category"
+                  value={formData.category}
+                  onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                  className="w-full h-10 px-3 rounded-lg bg-stone-900/50 border border-stone-700 text-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50"
+                >
+                  <option value="social">Social Media</option>
+                  <option value="email">Email</option>
+                  <option value="banking">Banking</option>
+                  <option value="work">Work</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <Label htmlFor="edit-password" className="text-stone-300">Password *</Label>
+                  <button
+                    type="button"
+                    onClick={generateNewPassword}
+                    className="text-xs text-blue-500 hover:text-blue-400 transition-colors"
+                  >
+                    Generate Strong Password
+                  </button>
+                </div>
+                <div className="relative">
+                  <Input
+                    id="edit-password"
+                    type={showFormPassword ? "text" : "password"}
+                    placeholder="Enter password"
+                    value={formData.password}
+                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                    required
+                    minLength={8}
+                    className="bg-stone-900/50 border-stone-700 text-white placeholder:text-stone-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 pr-10"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowFormPassword(!showFormPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400 hover:text-blue-400 transition-colors"
+                  >
+                    {showFormPassword ? <FaEyeSlash /> : <FaEye />}
+                  </button>
+                </div>
+                {formData.password && (
+                  <div className="mt-2">
+                    {(() => {
+                      const strength = calculatePasswordStrength(formData.password);
+                      return (
+                        <div className="flex items-center gap-2">
+                          <div className="flex-1 h-2 bg-stone-700 rounded-full overflow-hidden">
+                            <div 
+                              className={`h-full transition-all ${
+                                strength.color === 'green' ? 'bg-green-500' :
+                                strength.color === 'yellow' ? 'bg-yellow-500' :
+                                'bg-red-500'
+                              }`}
+                              style={{ width: `${strength.percentage}%` }}
+                            ></div>
+                          </div>
+                          <span className={`text-xs font-medium ${
+                            strength.color === 'green' ? 'text-green-500' :
+                            strength.color === 'yellow' ? 'text-yellow-500' :
+                            'text-red-500'
+                          }`}>
+                            {strength.displayText}
+                          </span>
+                        </div>
+                      );
+                    })()}
+                  </div>
+                )}
+              </div>
+
+              <div>
+                <Label htmlFor="edit-notes" className="text-stone-300">Notes</Label>
+                <textarea
+                  id="edit-notes"
+                  placeholder="Add any additional notes..."
+                  value={formData.notes}
+                  onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+                  rows={3}
+                  className="w-full px-3 py-2 rounded-lg bg-stone-900/50 border border-stone-700 text-white placeholder:text-stone-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 resize-none"
+                />
+              </div>
+
+              <div className="flex gap-3 pt-4">
+                <Button
+                  type="button"
+                  onClick={() => {
+                    setShowEditModal(false);
+                    setSelectedPassword(null);
+                    setFormData({
+                      url: '',
+                      title: '',
+                      password: '',
+                      category: 'other',
+                      notes: ''
+                    });
+                  }}
+                  className="flex-1 bg-stone-800 hover:bg-stone-700 text-white border border-stone-700 rounded-full h-10"
+                >
+                  Cancel
+                </Button>
+                <Button
+                  type="submit"
+                  className="flex-1 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white rounded-full h-10 shadow-[0_0_20px_rgba(59,130,246,0.3)]"
+                >
+                  <FaCheck className="mr-2" />
+                  Update Password
+                </Button>
+              </div>
+            </form>
+          </Card>
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {showDeleteModal && selectedPassword && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <Card className="w-full max-w-md bg-linear-to-br from-stone-900/95 via-black/95 to-stone-900/95 border-stone-700 p-6">
+            <div className="text-center mb-6">
+              <div className="mx-auto mb-4 w-16 h-16 rounded-full bg-red-500/20 border-2 border-red-500/40 flex items-center justify-center">
+                <FaTrash className="text-red-500 text-2xl" />
+              </div>
+              <h2 className="text-2xl font-bold text-white mb-2">Delete Password?</h2>
+              <p className="text-stone-400">
+                Are you sure you want to delete <span className="text-white font-semibold">"{selectedPassword.title}"</span>?
+                This action cannot be undone.
+              </p>
+            </div>
+
+            <div className="flex gap-3">
+              <Button
+                onClick={() => {
+                  setShowDeleteModal(false);
+                  setShowDetailsModal(true);
+                }}
+                className="flex-1 bg-stone-800 hover:bg-stone-700 text-white border border-stone-700 rounded-full h-10"
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={() => deletePassword(selectedPassword.$id)}
+                className="flex-1 bg-red-600 hover:bg-red-700 text-white rounded-full h-10"
+              >
+                <FaTrash className="mr-2" />
+                Delete
+              </Button>
+            </div>
           </Card>
         </div>
       )}
