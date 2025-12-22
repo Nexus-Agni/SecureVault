@@ -167,7 +167,7 @@ function UserProfile() {
                             <Loader />
                         </div>
                     ) : (
-                        <div className="max-w-[900px] mx-auto p-4 md:p-8">
+                        <div className="max-w-225 mx-auto p-4 md:p-8">
                             {/* User Info Card */}
                             <Card className="bg-linear-to-br from-stone-900/95 via-black/95 to-stone-900/95 border-stone-700 p-8 mb-6">
                                 <div className="flex items-center gap-6">
@@ -282,7 +282,7 @@ function UserProfile() {
                                 </Button>
                                 <Button
                                     type="submit"
-                                    className="flex-1 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white rounded-full h-10 shadow-[0_0_20px_rgba(59,130,246,0.3)]"
+                                    className="flex-1 bg-linear-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white rounded-full h-10 shadow-[0_0_20px_rgba(59,130,246,0.3)]"
                                 >
                                     <FaCheck className="mr-2" />
                                     Update
@@ -363,7 +363,7 @@ function UserProfile() {
                                 </Button>
                                 <Button
                                     type="submit"
-                                    className="flex-1 bg-gradient-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600 text-white rounded-full h-10 shadow-[0_0_20px_rgba(34,197,94,0.3)]"
+                                    className="flex-1 bg-linear-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600 text-white rounded-full h-10 shadow-[0_0_20px_rgba(34,197,94,0.3)]"
                                 >
                                     <FaCheck className="mr-2" />
                                     Update
@@ -459,7 +459,7 @@ function UserProfile() {
                                 </Button>
                                 <Button
                                     type="submit"
-                                    className="flex-1 bg-gradient-to-r from-red-600 to-red-500 hover:from-red-700 hover:to-red-600 text-white rounded-full h-10 shadow-[0_0_20px_rgba(239,68,68,0.3)]"
+                                    className="flex-1 bg-linear-to-r from-red-600 to-red-500 hover:from-red-700 hover:to-red-600 text-white rounded-full h-10 shadow-[0_0_20px_rgba(239,68,68,0.3)]"
                                 >
                                     <FaCheck className="mr-2" />
                                     Update

@@ -2,25 +2,28 @@ import { account, tablesDB } from "@/lib/appwrite";
 import { ID, Query } from "appwrite";
 import { toast } from "sonner";
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { FaLock, FaKey, FaStar, FaTrash, FaPlus, FaEye, FaEyeSlash, FaCopy, FaExternalLinkAlt, FaFolder, FaSearch, FaChevronDown, FaChevronLeft, FaChevronRight, FaShieldAlt, FaUserCircle, FaStickyNote, FaEllipsisH, FaCheck } from "react-icons/fa";
 import { MdGridView, MdViewList } from "react-icons/md";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
-import {Loader} from "@/components/Loader";import Sidebar from "@/components/Sidebar";import { calculatePasswordStrength, generatePassword } from "@/utils/passwordStrength";
+import { Loader } from "@/components/Loader";
+import Sidebar from "@/components/Sidebar";
+import { calculatePasswordStrength, generatePassword } from "@/utils/passwordStrength";
+import { usePasswordData } from "@/hooks/usePasswordData";
 
 function Vault() {
   const navigate = useNavigate();
+  const location = useLocation();
   const databaseId = import.meta.env.VITE_APPWRITE_DATABASE_ID;
   const tableId = import.meta.env.VITE_APPWRITE_PASSOWORD_TABLE_ID;
 
-  // User state
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  // Use custom hook for password data (full mode with passwords)
+  const { passwords: fetchedPasswords, loading, error, refetch } = usePasswordData({ lightweight: false });
 
-  // Passwords state
+  // Local passwords state for CRUD operations
   const [passwords, setPasswords] = useState([]);
   const [filteredPasswords, setFilteredPasswords] = useState([]);
   
@@ -51,24 +54,22 @@ function Vault() {
   });
   const [showFormPassword, setShowFormPassword] = useState(false);
 
-  // Fetch user on mount
+  // Sync fetched passwords to local state
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const userData = await account.get();
-        setUser(userData);
-        await listAllPasswords(userData.$id);
-      } catch (error) {
-        console.error("Error fetching user:", error);
-        toast.error("Please log in to access your vault");
-        navigate('/login');
-      } finally {
-        setLoading(false);
-      }
-    };
+    if (fetchedPasswords && fetchedPasswords.length >= 0) {
+      setPasswords(fetchedPasswords);
+    }
+  }, [fetchedPasswords]);
 
-    fetchUser();
-  }, []);
+  // Handle navigation state for filtering from Dashboard
+  useEffect(() => {
+    if (location.state?.category) {
+      setSelectedCategory(location.state.category);
+    }
+    if (location.state?.strength) {
+      setSelectedStrength(location.state.strength);
+    }
+  }, [location.state]);
 
   // Filter and search passwords
   useEffect(() => {
@@ -113,23 +114,6 @@ function Vault() {
     setCurrentPage(1);
   }, [passwords, searchQuery, selectedCategory, selectedStrength, sortBy]);
 
-  const listAllPasswords = async (userId) => {
-    try {
-      const response = await tablesDB.listRows({
-        databaseId,
-        tableId,
-        queries: [
-          Query.equal('userId', [userId]),
-          Query.orderDesc('$createdAt')
-        ]
-      });
-      setPasswords(response.rows || []);
-    } catch (error) {
-      console.error("Error fetching passwords:", error);
-      toast.error( error.message || "Failed to fetch passwords");
-    }
-  };
-
   const addNewPassword = async (e) => {
     e.preventDefault();
     
@@ -144,17 +128,19 @@ function Vault() {
     }
 
     try {
+      const userId = fetchedPasswords[0]?.userId || (await account.get()).$id;
       const response = await tablesDB.createRow({
         databaseId,
         tableId,
         rowId: ID.unique(),
         data: {
           ...formData,
-          userId: user.$id
+          userId: userId
         }
       });
 
       setPasswords([response, ...passwords]);
+      refetch(); // Refresh cache
       toast.success("Password added successfully");
       setShowAddModal(false);
       setFormData({
@@ -166,10 +152,9 @@ function Vault() {
       });
     } catch (error) {
       console.error("Error adding password:", error);
-      toast.error( error.message || "Failed to add password");
+      toast.error(error.message || "Failed to add password");
     }
   };
-
 
   const deletePassword = async (passwordId) => {
     try {
@@ -180,6 +165,7 @@ function Vault() {
       });
       
       setPasswords(passwords.filter(password => password.$id !== passwordId));
+      refetch(); // Refresh cache
       toast.success("Password deleted successfully");
       setShowDeleteModal(false);
       setShowDetailsModal(false);
@@ -255,6 +241,7 @@ function Vault() {
       setPasswords(passwords.map(password => 
         password.$id === selectedPassword.$id ? response : password
       ));
+      refetch(); // Refresh cache
       toast.success("Password updated successfully");
       setShowEditModal(false);
       setSelectedPassword(null);
