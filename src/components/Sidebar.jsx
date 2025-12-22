@@ -12,19 +12,24 @@ import {
   FaSignOutAlt
 } from 'react-icons/fa';
 import { Button } from '@/components/ui/button';
+import { Loader } from './Loader';
 
 function Sidebar() {
   const navigate = useNavigate();
   const location = useLocation();
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const userData = await account.get();
+        console.log("User Data: ", userData);
         setUser(userData);
       } catch (error) {
-        console.error("Error fetching user:", error);
+        // console.error("Error fetching user:", error);
+        toast.error("Please log in to access your vault");
+        navigate('/login');
       }
     };
 
@@ -60,11 +65,20 @@ function Sidebar() {
 
   const isActive = (path) => location.pathname === path;
 
-  const handleLogout = async () => {
-    // TODO: Implement logout functionality
-    // Will call account.deleteSession('current')
-    // Then navigate to login page
-    toast.info("Logout functionality to be implemented");
+  const handleLogout = async (e) => {
+    try { 
+      e.preventDefault();
+      setLoading(true);
+      const result = await account.deleteSession('current');
+      console.log("Logout Response: ", result);
+      toast.success("Logout successful");
+      navigate('/login');
+    } catch (error) {
+      console.error("Error logging out:", error);
+      toast.error("Something went wrong while logging out");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -72,7 +86,7 @@ function Sidebar() {
       {/* Logo Section */}
       <div className="p-4 border-b border-stone-700">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-red-500/20 to-red-600/20 border-2 border-red-500/40 flex items-center justify-center">
+          <div className="w-10 h-10 rounded-full bg-linear-to-br from-red-500/20 to-red-600/20 border-2 border-red-500/40 flex items-center justify-center">
             <FaShieldAlt className="text-red-500 text-xl" />
           </div>
           <div>
@@ -116,22 +130,25 @@ function Sidebar() {
       <div className="p-4 border-t border-stone-700">
         {user && (
           <div className="mb-4">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-red-500/20 to-red-600/20 border-2 border-red-500/40 flex items-center justify-center">
+            <button
+              onClick={() => navigate('/profile')}
+              className="flex items-center gap-3 mb-3 w-full hover:bg-stone-800/50 p-2 rounded-lg transition-colors duration-200"
+            >
+              <div className="w-10 h-10 rounded-full bg-linear-to-br from-red-500/20 to-red-600/20 border-2 border-red-500/40 flex items-center justify-center">
                 <FaUserCircle className="text-red-500 text-xl" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-white text-sm font-bold truncate">{user.name || 'User'}</p>
-                <p className="text-stone-400 text-xs truncate">{user.email}</p>
+                <p className="text-white text-sm font-bold truncate text-left">{user.name || 'User'}</p>
+                <p className="text-stone-400 text-xs truncate text-left">{user.email}</p>
               </div>
-            </div>
+            </button>
             
             <Button
               onClick={handleLogout}
               className="w-full bg-stone-800 hover:bg-stone-700 text-white border border-stone-700 rounded-full h-9 text-sm"
             >
               <FaSignOutAlt className="mr-2" />
-              Logout
+              {loading ? <Loader/> : "Logout"}
             </Button>
           </div>
         )}

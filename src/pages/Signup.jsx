@@ -48,8 +48,8 @@ function Signup() {
       toast("Signed Up successfully")
       navigate('/login', { replace: true, state: { email, password } })
     } catch (error) {
-      console.log("Signup Error: ", error);
-      toast("Signup failed")
+      // console.log("Signup Error: ", error);
+      toast(error.message || "Something went wrong while signing up");
     } finally {
       setLoading(false);
     }

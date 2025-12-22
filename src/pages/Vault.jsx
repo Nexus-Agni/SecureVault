@@ -126,7 +126,7 @@ function Vault() {
       setPasswords(response.rows || []);
     } catch (error) {
       console.error("Error fetching passwords:", error);
-      toast.error("Failed to fetch passwords");
+      toast.error( error.message || "Failed to fetch passwords");
     }
   };
 
@@ -166,7 +166,7 @@ function Vault() {
       });
     } catch (error) {
       console.error("Error adding password:", error);
-      toast.error("Failed to add password");
+      toast.error( error.message || "Failed to add password");
     }
   };
 
@@ -186,7 +186,7 @@ function Vault() {
       setSelectedPassword(null);
     } catch (error) {
       console.error("Error deleting password:", error);
-      toast.error("Failed to delete password");
+      toast.error(error.message || "Failed to delete password");
     }
   };
 
@@ -267,7 +267,7 @@ function Vault() {
       });
     } catch (error) {
       console.error("Error updating password:", error);
-      toast.error("Failed to update password");
+      toast.error(error.message || "Failed to update password");
     }
   };
 
@@ -331,7 +331,7 @@ function Vault() {
               <Loader />
             </div>
           ) : (
-          <div className="max-w-[1400px] mx-auto p-4 md:p-8">
+          <div className="max-w-350 mx-auto p-4 md:p-8">
             {/* Page Header */}
             <div className="flex flex-wrap justify-between items-end gap-3 pb-4 border-b border-stone-700 mb-6">
               <div>
@@ -742,7 +742,7 @@ function Vault() {
                 </Button>
                 <Button
                   type="submit"
-                  className="flex-1 bg-gradient-to-r from-red-600 to-red-500 hover:from-red-700 hover:to-red-600 text-white rounded-full h-10 shadow-[0_0_20px_rgba(239,68,68,0.3)]"
+                  className="flex-1 bg-linear-to-r from-red-600 to-red-500 hover:from-red-700 hover:to-red-600 text-white rounded-full h-10 shadow-[0_0_20px_rgba(239,68,68,0.3)]"
                 >
                   <FaCheck className="mr-2" />
                   Add Password
@@ -1053,7 +1053,7 @@ function Vault() {
                 </Button>
                 <Button
                   type="submit"
-                  className="flex-1 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white rounded-full h-10 shadow-[0_0_20px_rgba(59,130,246,0.3)]"
+                  className="flex-1 bg-linear-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white rounded-full h-10 shadow-[0_0_20px_rgba(59,130,246,0.3)]"
                 >
                   <FaCheck className="mr-2" />
                   Update Password

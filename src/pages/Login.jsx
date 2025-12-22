@@ -34,8 +34,8 @@ function Login() {
       toast("Logged In successfully")
       navigate('/dashboard')
     } catch (error) {
-      console.log("Login Error: ", response);
-      toast("Login failed")
+      // console.log("Login Error: ", error);
+      toast.error( error.message || "Something went wrong while logging in")
     } finally {
       setLoading(false);
     }

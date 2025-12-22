@@ -22,13 +22,11 @@ function CheckBreach() {
 
     setChecking(true);
     // TODO: Implement breach check using Have I Been Pwned API or similar
-    setTimeout(() => {
-      setResult({
-        breached: false,
-        message: 'Breach check functionality to be implemented'
-      });
-      setChecking(false);
-    }, 1500);
+    try {
+      
+    } catch (error) {
+      
+    }
   };
 
   return (

@@ -10,6 +10,7 @@ import Vault from './pages/Vault'
 import ProtectedRoute from './components/ProtectedRoute'
 import PasswordGenerator from './pages/PasswordGenerator'
 import CheckBreach from './pages/CheckBreach'
+import UserProfile from './components/UserProfile'
 
 function App() {
 
@@ -42,6 +43,11 @@ function App() {
         <Route path='/check-breach' element={
           <ProtectedRoute>
             <CheckBreach/>
+          </ProtectedRoute>
+        }/>
+        <Route path='/profile' element={
+          <ProtectedRoute>
+            <UserProfile/>
           </ProtectedRoute>
         }/>
       </Routes>
