@@ -34,7 +34,7 @@ function Vault() {
   const [selectedStrength, setSelectedStrength] = useState('any');
   const [sortBy, setSortBy] = useState('date');
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 12;
+  const itemsPerPage = 8;
 
   // Modal state
   const [showAddModal, setShowAddModal] = useState(false);
@@ -92,8 +92,10 @@ function Vault() {
     // Strength filter
     if (selectedStrength !== 'any') {
       filtered = filtered.filter(item => {
-        const strength = calculatePasswordStrength(item.password);
-        return strength.level === selectedStrength;
+        // Use stored strength value, convert veryStrong to very-strong for consistency
+        const storedStrength = item.strength || 'medium';
+        const normalizedStrength = storedStrength === 'veryStrong' ? 'very-strong' : storedStrength;
+        return normalizedStrength === selectedStrength;
       });
     }
 
@@ -104,8 +106,10 @@ function Vault() {
       filtered.sort((a, b) => a.title.localeCompare(b.title));
     } else if (sortBy === 'strength') {
       filtered.sort((a, b) => {
-        const strengthA = calculatePasswordStrength(a.password).score;
-        const strengthB = calculatePasswordStrength(b.password).score;
+        // Use stored strength for sorting
+        const strengthOrder = { veryStrong: 4, strong: 3, medium: 2, weak: 1 };
+        const strengthA = strengthOrder[a.strength] || 2;
+        const strengthB = strengthOrder[b.strength] || 2;
         return strengthB - strengthA;
       });
     }
@@ -129,13 +133,19 @@ function Vault() {
 
     try {
       const userId = fetchedPasswords[0]?.userId || (await account.get()).$id;
+      
+      // Calculate password strength
+      const strengthResult = calculatePasswordStrength(formData.password);
+      const strengthValue = strengthResult.level === 'very-strong' ? 'veryStrong' : strengthResult.level;
+      
       const response = await tablesDB.createRow({
         databaseId,
         tableId,
         rowId: ID.unique(),
         data: {
           ...formData,
-          userId: userId
+          userId: userId,
+          strength: strengthValue
         }
       });
 
@@ -225,6 +235,10 @@ function Vault() {
     }
 
     try {
+      // Calculate password strength
+      const strengthResult = calculatePasswordStrength(formData.password);
+      const strengthValue = strengthResult.level === 'very-strong' ? 'veryStrong' : strengthResult.level;
+      
       const response = await tablesDB.updateRow({
         databaseId,
         tableId,
@@ -234,7 +248,8 @@ function Vault() {
           title: formData.title,
           password: formData.password,
           category: formData.category,
-          notes: formData.notes
+          notes: formData.notes,
+          strength: strengthValue
         }
       });
 
@@ -281,12 +296,12 @@ function Vault() {
   };
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-[#22040b] via-[#120006] to-black flex">
+    <div className="min-h-screen bg-linear-to-br from-[#22040b] via-[#120006] to-black">
       {/* Shared Sidebar */}
       <Sidebar />
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+      <div className="md:ml-64 flex flex-col min-h-screen">
         {/* Header */}
         <header className="sticky top-0 z-20 bg-stone-900/95 backdrop-blur-sm border-b border-stone-700">
           <div className="flex items-center justify-between px-6 py-4">

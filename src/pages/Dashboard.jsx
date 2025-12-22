@@ -2,14 +2,14 @@ import React, { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '@/components/Sidebar';
 import { FaTachometerAlt, FaShieldAlt, FaLock, FaExclamationTriangle, FaCheckCircle, FaClock, FaCopy, FaHistory, FaChartBar, FaChartPie } from 'react-icons/fa';
-import { Card } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Loader } from '@/components/Loader';
 import { usePasswordData } from '@/hooks/usePasswordData';
-import { calculatePasswordStrength } from '@/utils/passwordStrength';
+import { BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, AreaChart, Area } from 'recharts';
 
 function Dashboard() {
   const navigate = useNavigate();
-  const { passwords, loading, error } = usePasswordData({ lightweight: true });
+  const { passwords, loading, error } = usePasswordData({ lightweight: false });
 
   // Calculate all statistics
   const stats = useMemo(() => {
@@ -23,7 +23,7 @@ function Dashboard() {
         oldPasswords: 0,
         recentActivity: [],
         categoryDistribution: {},
-        strengthDistribution: { weak: 0, medium: 0, strong: 0, 'very-strong': 0 },
+        strengthDistribution: { weak: 0, medium: 0, strong: 0, veryStrong: 0 },
         passwordAges: { '0-3months': 0, '3-6months': 0, '6+months': 0 }
       };
     }
@@ -35,24 +35,19 @@ function Dashboard() {
     let duplicates = 0;
     let oldPasswords = 0;
     const categoryCount = {};
-    const strengthCount = { weak: 0, medium: 0, strong: 0, 'very-strong': 0 };
+    const strengthCount = { weak: 0, medium: 0, strong: 0, veryStrong: 0 };
     const ageCount = { '0-3months': 0, '3-6months': 0, '6+months': 0 };
 
-    // Note: In lightweight mode, we don't have actual password values
-    // For demo purposes, we'll use mock strength calculation based on title/category
-    // In production, you'd fetch this data separately or include strength in DB
-    
     passwords.forEach(pwd => {
-      // For real implementation, store password strength in database
-      // Here we'll use a simplified approach
-      const mockStrength = pwd.title?.length > 10 ? 'strong' : 'medium'; // Mock calculation
+      // Use stored strength value from database
+      const strengthLevel = pwd.strength || 'medium';
       
       // Strength distribution
-      strengthCount[mockStrength] = (strengthCount[mockStrength] || 0) + 1;
+      strengthCount[strengthLevel] = (strengthCount[strengthLevel] || 0) + 1;
       
-      if (mockStrength === 'strong' || mockStrength === 'very-strong') {
+      if (strengthLevel === 'strong' || strengthLevel === 'veryStrong') {
         strong++;
-      } else if (mockStrength === 'weak') {
+      } else if (strengthLevel === 'weak') {
         weak++;
       }
 
@@ -73,12 +68,20 @@ function Dashboard() {
         oldPasswords++;
       }
 
-      // Check duplicates (simplified - in real app, compare actual passwords)
-      const key = pwd.title?.toLowerCase();
-      if (passwordMap.has(key)) {
-        duplicates++;
-      } else {
-        passwordMap.set(key, true);
+      // Check duplicates by comparing actual password values
+      if (pwd.password) {
+        if (passwordMap.has(pwd.password)) {
+          passwordMap.set(pwd.password, passwordMap.get(pwd.password) + 1);
+        } else {
+          passwordMap.set(pwd.password, 1);
+        }
+      }
+    });
+
+    // Count duplicates: passwords that appear more than once
+    passwordMap.forEach((count) => {
+      if (count > 1) {
+        duplicates += (count - 1); // Count extra occurrences as duplicates
       }
     });
 
@@ -125,10 +128,10 @@ function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-[#22040b] via-[#120006] to-black flex">
+    <div className="min-h-screen bg-linear-to-br from-[#22040b] via-[#120006] to-black">
       <Sidebar />
 
-      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+      <div className="md:ml-64 flex flex-col min-h-screen">
         <header className="sticky top-0 z-20 bg-stone-900/95 backdrop-blur-sm border-b border-stone-700">
           <div className="flex items-center justify-between px-6 py-4">
             <div className="flex items-center gap-4">
@@ -151,7 +154,7 @@ function Dashboard() {
           ) : (
             <div className="p-4 md:p-8 max-w-[1400px] mx-auto">
               {/* Stats Cards */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
                 <Card className="bg-linear-to-br from-stone-900/95 via-black/95 to-stone-900/95 border-stone-700 p-6">
                   <div className="flex items-center gap-4">
                     <div className="w-12 h-12 rounded-full bg-blue-500/20 border border-blue-500/30 flex items-center justify-center">
@@ -160,30 +163,6 @@ function Dashboard() {
                     <div>
                       <p className="text-stone-400 text-sm">Total Passwords</p>
                       <p className="text-white text-2xl font-bold">{stats.total}</p>
-                    </div>
-                  </div>
-                </Card>
-
-                <Card className="bg-linear-to-br from-stone-900/95 via-black/95 to-stone-900/95 border-stone-700 p-6">
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-full bg-green-500/20 border border-green-500/30 flex items-center justify-center">
-                      <FaCheckCircle className="text-green-500 text-xl" />
-                    </div>
-                    <div>
-                      <p className="text-stone-400 text-sm">Strong Passwords</p>
-                      <p className="text-white text-2xl font-bold">{stats.strong}</p>
-                    </div>
-                  </div>
-                </Card>
-
-                <Card className="bg-linear-to-br from-stone-900/95 via-black/95 to-stone-900/95 border-stone-700 p-6">
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-full bg-yellow-500/20 border border-yellow-500/30 flex items-center justify-center">
-                      <FaExclamationTriangle className="text-yellow-500 text-xl" />
-                    </div>
-                    <div>
-                      <p className="text-stone-400 text-sm">Weak Passwords</p>
-                      <p className="text-white text-2xl font-bold">{stats.weak}</p>
                     </div>
                   </div>
                 </Card>
@@ -199,20 +178,32 @@ function Dashboard() {
                     </div>
                   </div>
                 </Card>
+
+                <Card className="bg-linear-to-br from-stone-900/95 via-black/95 to-stone-900/95 border-stone-700 p-6">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-full bg-orange-500/20 border border-orange-500/30 flex items-center justify-center">
+                      <FaCopy className="text-orange-500 text-xl" />
+                    </div>
+                    <div>
+                      <p className="text-stone-400 text-sm">Duplicate Passwords</p>
+                      <p className="text-white text-2xl font-bold">{stats.duplicates}</p>
+                    </div>
+                  </div>
+                </Card>
               </div>
 
               {/* Main Content Grid */}
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                {/* Left Column - 2/3 width */}
-                <div className="lg:col-span-2 space-y-6">
-                  {/* Recent Activity Timeline */}
+              {/* First Row: Recent Activity + Password Strength */}
+              <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 mb-6">
+                {/* Recent Activity - 2/5 width */}
+                <div className="lg:col-span-2">
                   <Card className="bg-linear-to-br from-stone-900/95 via-black/95 to-stone-900/95 border-stone-700 p-6">
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center gap-3">
                         <FaHistory className="text-blue-500 text-xl" />
                         <h2 className="text-white font-bold text-lg">Recent Activity</h2>
                       </div>
-                      <span className="text-stone-400 text-sm">Last 10 passwords</span>
+                      <span className="text-stone-400 text-sm">Last 10</span>
                     </div>
 
                     {stats.recentActivity.length === 0 ? (
@@ -222,7 +213,7 @@ function Dashboard() {
                         <p className="text-stone-500 text-sm mt-1">Start by adding your first password</p>
                       </div>
                     ) : (
-                      <div className="space-y-3">
+                      <div className="space-y-3 max-h-[400px] overflow-y-auto">
                         {stats.recentActivity.map((pwd, index) => (
                           <div
                             key={pwd.$id}
@@ -261,9 +252,92 @@ function Dashboard() {
                       </div>
                     )}
                   </Card>
+                </div>
 
-                  {/* Password Health Insights */}
+                {/* Password Strength - 3/5 width */}
+                <div className="lg:col-span-3">
                   <Card className="bg-linear-to-br from-stone-900/95 via-black/95 to-stone-900/95 border-stone-700 p-6">
+                    <div className="flex items-center gap-3 mb-4">
+                      <FaChartBar className="text-green-500 text-xl" />
+                      <h2 className="text-white font-bold text-lg">Password Strength</h2>
+                    </div>
+
+                    {stats.total === 0 ? (
+                      <div className="text-center py-6">
+                        <p className="text-stone-500 text-sm">No data yet</p>
+                      </div>
+                    ) : (
+                      <>
+                        <div className="h-80 mb-4">
+                          <ResponsiveContainer width="100%" height="100%">
+                            <BarChart
+                              data={[
+                                { 
+                                  name: 'Very Strong', 
+                                  count: stats.strengthDistribution.veryStrong || 0,
+                                  fill: '#10b981',
+                                  strength: 'veryStrong'
+                                },
+                                { 
+                                  name: 'Strong', 
+                                  count: stats.strengthDistribution.strong || 0,
+                                  fill: '#22c55e',
+                                  strength: 'strong'
+                                },
+                                { 
+                                  name: 'Medium', 
+                                  count: stats.strengthDistribution.medium || 0,
+                                  fill: '#eab308',
+                                  strength: 'medium'
+                                },
+                                { 
+                                  name: 'Weak', 
+                                  count: stats.strengthDistribution.weak || 0,
+                                  fill: '#ef4444',
+                                  strength: 'weak'
+                                }
+                              ]}
+                            >
+                              <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+                              <XAxis 
+                                dataKey="name" 
+                                stroke="#9ca3af" 
+                                tick={{ fontSize: 14 }}
+                              />
+                              <YAxis stroke="#9ca3af" />
+                              <Tooltip contentStyle={{ backgroundColor: '#1c1917', border: '1px solid #44403c', borderRadius: '8px', color: '#fff' }} />
+                              <Bar 
+                                dataKey="count" 
+                                radius={[8, 8, 0, 0]}
+                                onClick={(data) => navigate('/vault', { state: { strength: data.strength } })}
+                                className="cursor-pointer hover:opacity-80"
+                              />
+                            </BarChart>
+                          </ResponsiveContainer>
+                        </div>
+                        
+                        <div className="mt-4 p-3 bg-stone-900/50 border border-stone-800 rounded-lg">
+                          <div className="text-center">
+                            <p className="text-stone-400 text-xs mb-1">Average Security</p>
+                            <p className={`text-2xl font-bold ${
+                              stats.securityScore >= 80 ? 'text-green-500' :
+                              stats.securityScore >= 60 ? 'text-yellow-500' :
+                              'text-red-500'
+                            }`}>
+                              {stats.securityScore}%
+                            </p>
+                          </div>
+                        </div>
+                      </>
+                    )}
+                  </Card>
+                </div>
+              </div>
+
+              {/* Second Row: Password Health + Category Distribution */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Password Health */}
+                <Card className="bg-linear-to-br from-stone-900/95 via-black/95 to-stone-900/95 border-stone-700 p-6">
                     <div className="flex items-center gap-3 mb-4">
                       <FaExclamationTriangle className="text-yellow-500 text-xl" />
                       <h2 className="text-white font-bold text-lg">Password Health</h2>
@@ -313,61 +387,47 @@ function Dashboard() {
                           <span className="text-white font-medium">Password Age Distribution</span>
                         </div>
                         
-                        <div className="space-y-3">
-                          {/* 0-3 months */}
+                        <div className="h-48 mb-3">
+                          <ResponsiveContainer width="100%" height="100%">
+                            <AreaChart
+                              data={[
+                                { name: '0-3m', count: stats.passwordAges['0-3months'], fill: '#22c55e' },
+                                { name: '3-6m', count: stats.passwordAges['3-6months'], fill: '#eab308' },
+                                { name: '6+m', count: stats.passwordAges['6+months'], fill: '#ef4444' }
+                              ]}
+                            >
+                              <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+                              <XAxis dataKey="name" stroke="#9ca3af" />
+                              <YAxis stroke="#9ca3af" />
+                              <Tooltip contentStyle={{ backgroundColor: '#1c1917', border: '1px solid #44403c', borderRadius: '8px', color: '#fff' }} />
+                              <Area type="monotone" dataKey="count" stroke="#3b82f6" fill="#3b82f6" fillOpacity={0.6} />
+                            </AreaChart>
+                          </ResponsiveContainer>
+                        </div>
+                        
+                        <div className="grid grid-cols-3 gap-2 text-center text-xs">
                           <div>
-                            <div className="flex items-center justify-between mb-1">
-                              <span className="text-stone-300 text-sm">0-3 months</span>
-                              <span className="text-green-400 text-sm font-medium">{stats.passwordAges['0-3months']}</span>
-                            </div>
-                            <div className="h-2 bg-stone-800 rounded-full overflow-hidden">
-                              <div 
-                                className="h-full bg-green-500 rounded-full transition-all"
-                                style={{ width: `${stats.total > 0 ? (stats.passwordAges['0-3months'] / stats.total) * 100 : 0}%` }}
-                              ></div>
-                            </div>
+                            <p className="text-green-400 font-bold">{stats.passwordAges['0-3months']}</p>
+                            <p className="text-stone-500">Recent</p>
                           </div>
-
-                          {/* 3-6 months */}
                           <div>
-                            <div className="flex items-center justify-between mb-1">
-                              <span className="text-stone-300 text-sm">3-6 months</span>
-                              <span className="text-yellow-400 text-sm font-medium">{stats.passwordAges['3-6months']}</span>
-                            </div>
-                            <div className="h-2 bg-stone-800 rounded-full overflow-hidden">
-                              <div 
-                                className="h-full bg-yellow-500 rounded-full transition-all"
-                                style={{ width: `${stats.total > 0 ? (stats.passwordAges['3-6months'] / stats.total) * 100 : 0}%` }}
-                              ></div>
-                            </div>
+                            <p className="text-yellow-400 font-bold">{stats.passwordAges['3-6months']}</p>
+                            <p className="text-stone-500">Moderate</p>
                           </div>
-
-                          {/* 6+ months */}
                           <div>
-                            <div className="flex items-center justify-between mb-1">
-                              <span className="text-stone-300 text-sm">6+ months</span>
-                              <span className="text-red-400 text-sm font-medium">{stats.passwordAges['6+months']}</span>
-                            </div>
-                            <div className="h-2 bg-stone-800 rounded-full overflow-hidden">
-                              <div 
-                                className="h-full bg-red-500 rounded-full transition-all"
-                                style={{ width: `${stats.total > 0 ? (stats.passwordAges['6+months'] / stats.total) * 100 : 0}%` }}
-                              ></div>
-                            </div>
+                            <p className="text-red-400 font-bold">{stats.passwordAges['6+months']}</p>
+                            <p className="text-stone-500">Old</p>
                           </div>
                         </div>
                       </div>
                     </div>
                   </Card>
-                </div>
 
-                {/* Right Column - 1/3 width */}
-                <div className="space-y-6">
-                  {/* Category Distribution */}
-                  <Card className="bg-linear-to-br from-stone-900/95 via-black/95 to-stone-900/95 border-stone-700 p-6">
+                {/* Category Distribution */}
+                <Card className="bg-linear-to-br from-stone-900/95 via-black/95 to-stone-900/95 border-stone-700 p-6">
                     <div className="flex items-center gap-3 mb-4">
                       <FaChartPie className="text-purple-500 text-xl" />
-                      <h2 className="text-white font-bold text-lg">Categories</h2>
+                      <h2 className="text-white font-bold text-lg">Category Distribution</h2>
                     </div>
 
                     {stats.total === 0 ? (
@@ -375,45 +435,53 @@ function Dashboard() {
                         <p className="text-stone-500 text-sm">No data yet</p>
                       </div>
                     ) : (
-                      <div className="space-y-3">
-                        {Object.entries(stats.categoryDistribution)
-                          .sort(([, a], [, b]) => b - a)
-                          .map(([category, count]) => {
-                            const percentage = (count / stats.total) * 100;
-                            const colors = {
-                              social: 'bg-blue-500',
-                              email: 'bg-purple-500',
-                              banking: 'bg-green-500',
-                              work: 'bg-orange-500',
-                              other: 'bg-gray-500'
-                            };
-
-                            return (
-                              <div
-                                key={category}
-                                onClick={() => navigate('/vault', { state: { category } })}
-                                className="cursor-pointer hover:bg-stone-800/50 p-3 rounded-lg transition-all group"
+                      <>
+                        <div className="h-64 mb-4">
+                          <ResponsiveContainer width="100%" height="100%">
+                            <PieChart>
+                              <Pie
+                                data={Object.entries(stats.categoryDistribution).map(([name, value]) => ({
+                                  name: name.charAt(0).toUpperCase() + name.slice(1),
+                                  value,
+                                  fill: {
+                                    social: '#3b82f6',
+                                    email: '#a855f7',
+                                    banking: '#22c55e',
+                                    work: '#f97316',
+                                    other: '#6b7280'
+                                  }[name] || '#6b7280'
+                                }))}
+                                cx="50%"
+                                cy="50%"
+                                labelLine={false}
+                                label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                                outerRadius={80}
+                                dataKey="value"
                               >
-                                <div className="flex items-center justify-between mb-2">
-                                  <div className="flex items-center gap-2">
-                                    <span className="text-xl">{getCategoryIcon(category)}</span>
-                                    <span className="text-white capitalize font-medium">{category}</span>
-                                  </div>
-                                  <span className="text-stone-400 font-medium">{count}</span>
-                                </div>
-                                <div className="h-2 bg-stone-800 rounded-full overflow-hidden">
-                                  <div 
-                                    className={`h-full ${colors[category] || colors.other} rounded-full transition-all group-hover:opacity-80`}
-                                    style={{ width: `${percentage}%` }}
-                                  ></div>
-                                </div>
-                                <div className="text-stone-500 text-xs mt-1">
-                                  {percentage.toFixed(1)}% of total
-                                </div>
-                              </div>
-                            );
-                          })}
-                      </div>
+                                {Object.entries(stats.categoryDistribution).map(([category], index) => (
+                                  <Cell 
+                                    key={`cell-${index}`} 
+                                    className="cursor-pointer hover:opacity-80"
+                                    onClick={() => navigate('/vault', { state: { category } })}
+                                  />
+                                ))}
+                              </Pie>
+                              <Tooltip contentStyle={{ backgroundColor: '#1c1917', border: '1px solid #44403c', borderRadius: '8px', color: '#fff' }} />
+                            </PieChart>
+                          </ResponsiveContainer>
+                        </div>
+                        <div className="flex flex-wrap gap-2 justify-center">
+                          {Object.entries(stats.categoryDistribution).map(([category, count]) => (
+                            <button
+                              key={category}
+                              onClick={() => navigate('/vault', { state: { category } })}
+                              className="px-3 py-1 rounded-full text-xs font-medium bg-stone-800 hover:bg-stone-700 text-stone-300 transition-colors"
+                            >
+                              {getCategoryIcon(category)} {category.charAt(0).toUpperCase() + category.slice(1)}: {count}
+                            </button>
+                          ))}
+                        </div>
+                      </>
                     )}
 
                     {stats.total > 0 && (
@@ -425,118 +493,6 @@ function Dashboard() {
                       </button>
                     )}
                   </Card>
-
-                  {/* Strength Distribution */}
-                  <Card className="bg-linear-to-br from-stone-900/95 via-black/95 to-stone-900/95 border-stone-700 p-6">
-                    <div className="flex items-center gap-3 mb-4">
-                      <FaChartBar className="text-green-500 text-xl" />
-                      <h2 className="text-white font-bold text-lg">Strength</h2>
-                    </div>
-
-                    {stats.total === 0 ? (
-                      <div className="text-center py-6">
-                        <p className="text-stone-500 text-sm">No data yet</p>
-                      </div>
-                    ) : (
-                      <div className="space-y-3">
-                        {/* Very Strong */}
-                        <div
-                          onClick={() => navigate('/vault', { state: { strength: 'very-strong' } })}
-                          className="cursor-pointer hover:bg-stone-800/50 p-3 rounded-lg transition-all group"
-                        >
-                          <div className="flex items-center justify-between mb-2">
-                            <div className="flex items-center gap-2">
-                              <div className="w-3 h-3 rounded-full bg-emerald-500"></div>
-                              <span className="text-white font-medium">Very Strong</span>
-                            </div>
-                            <span className="text-stone-400 font-medium">{stats.strengthDistribution['very-strong'] || 0}</span>
-                          </div>
-                          <div className="h-2 bg-stone-800 rounded-full overflow-hidden">
-                            <div 
-                              className="h-full bg-emerald-500 rounded-full transition-all group-hover:opacity-80"
-                              style={{ width: `${stats.total > 0 ? ((stats.strengthDistribution['very-strong'] || 0) / stats.total) * 100 : 0}%` }}
-                            ></div>
-                          </div>
-                        </div>
-
-                        {/* Strong */}
-                        <div
-                          onClick={() => navigate('/vault', { state: { strength: 'strong' } })}
-                          className="cursor-pointer hover:bg-stone-800/50 p-3 rounded-lg transition-all group"
-                        >
-                          <div className="flex items-center justify-between mb-2">
-                            <div className="flex items-center gap-2">
-                              <div className="w-3 h-3 rounded-full bg-green-500"></div>
-                              <span className="text-white font-medium">Strong</span>
-                            </div>
-                            <span className="text-stone-400 font-medium">{stats.strengthDistribution['strong'] || 0}</span>
-                          </div>
-                          <div className="h-2 bg-stone-800 rounded-full overflow-hidden">
-                            <div 
-                              className="h-full bg-green-500 rounded-full transition-all group-hover:opacity-80"
-                              style={{ width: `${stats.total > 0 ? ((stats.strengthDistribution['strong'] || 0) / stats.total) * 100 : 0}%` }}
-                            ></div>
-                          </div>
-                        </div>
-
-                        {/* Medium */}
-                        <div
-                          onClick={() => navigate('/vault', { state: { strength: 'medium' } })}
-                          className="cursor-pointer hover:bg-stone-800/50 p-3 rounded-lg transition-all group"
-                        >
-                          <div className="flex items-center justify-between mb-2">
-                            <div className="flex items-center gap-2">
-                              <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-                              <span className="text-white font-medium">Medium</span>
-                            </div>
-                            <span className="text-stone-400 font-medium">{stats.strengthDistribution['medium'] || 0}</span>
-                          </div>
-                          <div className="h-2 bg-stone-800 rounded-full overflow-hidden">
-                            <div 
-                              className="h-full bg-yellow-500 rounded-full transition-all group-hover:opacity-80"
-                              style={{ width: `${stats.total > 0 ? ((stats.strengthDistribution['medium'] || 0) / stats.total) * 100 : 0}%` }}
-                            ></div>
-                          </div>
-                        </div>
-
-                        {/* Weak */}
-                        <div
-                          onClick={() => navigate('/vault', { state: { strength: 'weak' } })}
-                          className="cursor-pointer hover:bg-stone-800/50 p-3 rounded-lg transition-all group"
-                        >
-                          <div className="flex items-center justify-between mb-2">
-                            <div className="flex items-center gap-2">
-                              <div className="w-3 h-3 rounded-full bg-red-500"></div>
-                              <span className="text-white font-medium">Weak</span>
-                            </div>
-                            <span className="text-stone-400 font-medium">{stats.strengthDistribution['weak'] || 0}</span>
-                          </div>
-                          <div className="h-2 bg-stone-800 rounded-full overflow-hidden">
-                            <div 
-                              className="h-full bg-red-500 rounded-full transition-all group-hover:opacity-80"
-                              style={{ width: `${stats.total > 0 ? ((stats.strengthDistribution['weak'] || 0) / stats.total) * 100 : 0}%` }}
-                            ></div>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-
-                    {stats.total > 0 && (
-                      <div className="mt-4 p-3 bg-stone-900/50 border border-stone-800 rounded-lg">
-                        <div className="text-center">
-                          <p className="text-stone-400 text-xs mb-1">Average Security</p>
-                          <p className={`text-2xl font-bold ${
-                            stats.securityScore >= 80 ? 'text-green-500' :
-                            stats.securityScore >= 60 ? 'text-yellow-500' :
-                            'text-red-500'
-                          }`}>
-                            {stats.securityScore}%
-                          </p>
-                        </div>
-                      </div>
-                    )}
-                  </Card>
-                </div>
               </div>
             </div>
           )}

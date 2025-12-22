@@ -34,12 +34,12 @@ function PasswordGenerator() {
   const strength = password ? calculatePasswordStrength(password) : null;
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-[#22040b] via-[#120006] to-black flex">
+    <div className="min-h-screen bg-linear-to-br from-[#22040b] via-[#120006] to-black">
       {/* Shared Sidebar */}
       <Sidebar />
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+      <div className="md:ml-64 flex flex-col min-h-screen">
         {/* Header */}
         <header className="sticky top-0 z-20 bg-stone-900/95 backdrop-blur-sm border-b border-stone-700">
           <div className="flex items-center justify-between px-6 py-4">

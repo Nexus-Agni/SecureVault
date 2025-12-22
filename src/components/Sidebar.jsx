@@ -82,7 +82,7 @@ function Sidebar() {
   };
 
   return (
-    <aside className="hidden md:flex w-64 flex-col bg-stone-900/50 border-r border-stone-700">
+    <aside className="hidden md:flex w-64 flex-col bg-stone-900/50 border-r border-stone-700 fixed left-0 top-0 h-screen">
       {/* Logo Section */}
       <div className="p-4 border-b border-stone-700">
         <div className="flex items-center gap-3">
