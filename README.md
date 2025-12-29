@@ -267,7 +267,6 @@ VITE_APPWRITE_ENDPOINT=your_appwrite_endpoint
 VITE_APPWRITE_PROJECT_ID=your_project_id
 VITE_APPWRITE_DATABASE_ID=your_database_id
 VITE_APPWRITE_PASSOWORD_TABLE_ID=your_password_table_id
-VITE_BASE_URL=http://localhost:5173
 ```
 
 4. **Set up Appwrite**

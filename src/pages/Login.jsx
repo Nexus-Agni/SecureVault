@@ -50,7 +50,7 @@ function Login() {
     try {
       const response = account.createRecovery({
         email,
-        url : `${import.meta.env.VITE_BASE_URL}/reset-password`
+        url : `${window.location.origin}/reset-password`
       })
       toast("Password reset link sent to your email")
       console.log("Response: ", response);
