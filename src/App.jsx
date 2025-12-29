@@ -11,6 +11,8 @@ import ProtectedRoute from './components/ProtectedRoute'
 import PasswordGenerator from './pages/PasswordGenerator'
 import CheckBreach from './pages/CheckBreach'
 import UserProfile from './components/UserProfile'
+import SecondFactorAuth from './pages/SecondFactorAuth'
+import OAuthCallback from './pages/OAuthCallback'
 
 function App() {
 
@@ -23,6 +25,8 @@ function App() {
         <Route path='/login' element={<Login/>}/>
         <Route path='/signup' element={<Signup/>}/>
         <Route path='/reset-password' element={<ResetPassword/>}/>
+        <Route path='/mfa' element={<SecondFactorAuth/>}/>
+        <Route path='/oauth-callback' element={<OAuthCallback/>}/>
         
         {/* Protected Routes */}
         <Route path='/dashboard' element={

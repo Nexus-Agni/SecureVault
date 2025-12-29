@@ -10,6 +10,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { FaUserPlus, FaEye, FaEyeSlash } from 'react-icons/fa'
 import { AuthHeader } from '@/components/AuthHeader'
 import { Loader } from '@/components/Loader'
+import GoogleAuth from '@/components/GoogleAuth'
 
 function Signup() {
   const [name, setName] = useState('')
@@ -157,6 +158,17 @@ function Signup() {
                   {loading ? <Loader /> : 'Create Account'}
                 </Button>
               </form>
+              
+              <div className="relative my-4">
+                <div className="absolute inset-0 flex items-center">
+                  <span className="w-full border-t border-neutral-700" />
+                </div>
+                <div className="relative flex justify-center text-xs uppercase">
+                  <span className="bg-black px-2 text-neutral-500">Or continue with</span>
+                </div>
+              </div>
+              
+              <GoogleAuth />
             </CardContent>
             <CardFooter className="flex-col gap-4">
               <div className="text-center text-sm text-neutral-300">

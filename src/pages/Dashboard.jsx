@@ -152,7 +152,7 @@ function Dashboard() {
               <Loader />
             </div>
           ) : (
-            <div className="p-4 md:p-8 max-w-[1400px] mx-auto">
+            <div className="p-4 md:p-8 max-w-350 mx-auto">
               {/* Stats Cards */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
                 <Card className="bg-linear-to-br from-stone-900/95 via-black/95 to-stone-900/95 border-stone-700 p-6">
@@ -213,14 +213,14 @@ function Dashboard() {
                         <p className="text-stone-500 text-sm mt-1">Start by adding your first password</p>
                       </div>
                     ) : (
-                      <div className="space-y-3 max-h-[400px] overflow-y-auto">
+                      <div className="space-y-3 max-h-100 overflow-y-auto">
                         {stats.recentActivity.map((pwd, index) => (
                           <div
                             key={pwd.$id}
                             onClick={() => navigate('/vault')}
                             className="flex items-center gap-4 p-3 rounded-lg bg-stone-900/50 border border-stone-800 hover:border-blue-500/50 hover:bg-stone-800/50 cursor-pointer transition-all group"
                           >
-                            <div className="w-10 h-10 rounded-full bg-blue-500/20 border border-blue-500/30 flex items-center justify-center text-xl flex-shrink-0">
+                            <div className="w-10 h-10 rounded-full bg-blue-500/20 border border-blue-500/30 flex items-center justify-center text-xl shrink-0">
                               {getCategoryIcon(pwd.category)}
                             </div>
                             <div className="flex-1 min-w-0">

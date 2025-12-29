@@ -9,6 +9,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { FaLock, FaEye, FaEyeSlash } from 'react-icons/fa';
 import { AuthHeader } from '@/components/AuthHeader';
 import { Loader } from '@/components/Loader';
+import GoogleAuth from '@/components/GoogleAuth';
 
 function Login() {
   const navigate = useNavigate();
@@ -36,6 +37,9 @@ function Login() {
     } catch (error) {
       // console.log("Login Error: ", error);
       toast.error( error.message || "Something went wrong while logging in")
+      if (error.type === `user_more_factors_required`){
+        navigate('/mfa')
+    }
     } finally {
       setLoading(false);
     }
@@ -127,6 +131,17 @@ function Login() {
                   {loading ? <Loader /> : 'Login'}
                 </Button>
               </form>
+              
+              <div className="relative my-4">
+                <div className="absolute inset-0 flex items-center">
+                  <span className="w-full border-t border-neutral-700" />
+                </div>
+                <div className="relative flex justify-center text-xs uppercase">
+                  <span className="bg-black px-2 text-neutral-500">Or continue with</span>
+                </div>
+              </div>
+              
+              <GoogleAuth />
             </CardContent>
             <CardFooter className="flex-col gap-4">
               <div className="text-center text-sm text-neutral-300">

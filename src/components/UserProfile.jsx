@@ -6,9 +6,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
-import { FaUserCircle, FaEnvelope, FaLock, FaUser, FaEye, FaEyeSlash, FaCheck, FaTimes } from "react-icons/fa";
+import { FaUserCircle, FaEnvelope, FaLock, FaUser, FaEye, FaEyeSlash, FaCheck, FaTimes, FaShieldAlt } from "react-icons/fa";
 import Sidebar from "@/components/Sidebar";
 import { Loader } from "@/components/Loader";
+import CreateMFA from "@/components/CreateMFA";
 
 function UserProfile() {
     const navigate = useNavigate();
@@ -25,6 +26,7 @@ function UserProfile() {
     const [showNameModal, setShowNameModal] = useState(false);
     const [showEmailModal, setShowEmailModal] = useState(false);
     const [showPasswordModal, setShowPasswordModal] = useState(false);
+    const [showMFAModal, setShowMFAModal] = useState(false);
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -184,7 +186,7 @@ function UserProfile() {
                                 </div>
                             </Card>
 
-                            {/* Action Buttons */}
+                            {/* Action Buttons */}2 lg:grid-cols-4
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                 {/* Update Name Button */}
                                 <button
@@ -230,6 +232,22 @@ function UserProfile() {
                                         <div>
                                             <h3 className="text-white font-bold text-lg mb-1">Update Password</h3>
                                             <p className="text-stone-400 text-sm">Change your password</p>
+                                        </div>
+                                    </div>
+                                </button>
+
+                                {/* Enable 2FA Button */}
+                                <button
+                                    onClick={() => setShowMFAModal(true)}
+                                    className="group bg-linear-to-br from-stone-900/95 via-black/95 to-stone-900/95 border border-stone-700 hover:border-purple-500/50 rounded-xl p-6 transition-all duration-300 hover:shadow-[0_0_30px_rgba(168,85,247,0.2)]"
+                                >
+                                    <div className="flex flex-col items-center gap-4">
+                                        <div className="w-16 h-16 rounded-full bg-purple-500/20 border-2 border-purple-500/30 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                                            <FaShieldAlt className="text-purple-500 text-2xl" />
+                                        </div>
+                                        <div>
+                                            <h3 className="text-white font-bold text-lg mb-1">Enable 2FA</h3>
+                                            <p className="text-stone-400 text-sm">Two-factor authentication</p>
                                         </div>
                                     </div>
                                 </button>
@@ -468,8 +486,11 @@ function UserProfile() {
                         </form>
                     </div>
                 </div>
-            )}
-        </div>
+            )}            
+            {/* Create MFA Modal */}
+            {showMFAModal && (
+                <CreateMFA onClose={() => setShowMFAModal(false)} />
+            )}        </div>
     );
 }
 
