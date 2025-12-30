@@ -2,8 +2,9 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { FaShieldAlt, FaLock, FaKey, FaCheckCircle, FaUserCircle, FaPlayCircle, FaUsers } from 'react-icons/fa'
-import { MdSecurity, MdVerifiedUser, MdAutoAwesome, MdCloudOff, MdWarning, MdEnhancedEncryption, MdVisibilityOff, MdFolderShared, MdHandshake, MdMenu, MdMoreVert } from 'react-icons/md'
+import { FaShieldAlt, FaLock, FaKey, FaCheckCircle, FaUserCircle, FaPlayCircle, FaUsers, FaChartBar, FaGoogle, FaHistory, FaCopy, FaFilter, FaExclamationTriangle } from 'react-icons/fa'
+import { MdSecurity, MdVerifiedUser, MdAutoAwesome, MdCloudOff, MdWarning, MdEnhancedEncryption, MdVisibilityOff, MdFolderShared, MdHandshake, MdMenu, MdMoreVert, MdPassword, MdDashboard, MdCategory, MdQrCode2, MdDevices, MdImportExport, MdNotifications, MdFingerprint } from 'react-icons/md'
+import { BiSearch } from 'react-icons/bi'
 
 function Home() {
   const navigate = useNavigate()
@@ -18,9 +19,9 @@ function Home() {
             <h2 className="text-xl font-bold tracking-tight">SecureVault</h2>
           </div>
           <div className="hidden md:flex items-center gap-8">
-            <a className="text-sm font-medium hover:text-red-500 transition-colors cursor-pointer">How It Works</a>
-            <a className="text-sm font-medium hover:text-red-500 transition-colors cursor-pointer">Why Secure</a>
-            <a className="text-sm font-medium hover:text-red-500 transition-colors cursor-pointer">FAQs</a>
+            <a href="#features" className="text-sm font-medium hover:text-red-500 transition-colors cursor-pointer">Features</a>
+            <a href="#security" className="text-sm font-medium hover:text-red-500 transition-colors cursor-pointer">Security</a>
+            <a href="#roadmap" className="text-sm font-medium hover:text-red-500 transition-colors cursor-pointer">Roadmap</a>
           </div>
           <div className="flex items-center gap-4">
             <Button 
@@ -53,10 +54,10 @@ function Home() {
                 <span className="text-xs font-medium uppercase tracking-wider text-red-400">Your Guide to Digital Safety</span>
               </div>
               <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold leading-[1.1] tracking-tight">
-                Unlock Your <span className="text-transparent bg-clip-text bg-linear-to-r from-red-500 to-yellow-200">Personal Security</span> Journey
+                Secure Your Digital Life with <span className="text-transparent bg-clip-text bg-linear-to-r from-red-500 to-yellow-200">Industry-Grade Protection</span>
               </h1>
               <p className="text-lg text-stone-400 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
-                Feeling overwhelmed by online security? We'll guide you step-by-step to protect your digital life, simply and effectively.
+                A complete password management solution with 2FA, breach monitoring, analytics, and smart password generation. Your passwords, secured and organized.
               </p>
               <div className="flex flex-wrap gap-4 justify-center lg:justify-start pt-4">
                 <Button 
@@ -64,13 +65,14 @@ function Home() {
                   className="h-12 px-8 rounded-full bg-red-500 text-black font-bold text-base hover:scale-105 transition-transform shadow-[0_0_20px_rgba(234,40,49,0.3)]"
                 >
                   <FaPlayCircle className="mr-2" />
-                  Begin Your Journey
+                  Get Started Free
                 </Button>
                 <Button 
+                  onClick={() => document.getElementById('features').scrollIntoView({ behavior: 'smooth' })}
                   variant="outline"
                   className="h-12 px-8 rounded-full bg-stone-800 border-stone-700 hover:bg-stone-700 text-white font-bold text-base transition-colors"
                 >
-                  Learn More
+                  Explore Features
                 </Button>
               </div>
               <div className="pt-6 flex items-center justify-center lg:justify-start gap-4 text-sm text-stone-500">
@@ -128,211 +130,573 @@ function Home() {
           </div>
         </section>
 
-        {/* Step 1: Challenge */}
-        <section className="w-full px-6 py-20 max-w-7xl flex flex-col lg:flex-row items-center gap-12 bg-stone-900/50 rounded-xl my-8">
-          <div className="flex-1 text-center lg:text-left">
-            <span className="text-red-500 text-sm font-bold uppercase tracking-wider mb-4 block">Step 1: The Challenge</span>
-            <h2 className="text-3xl md:text-5xl font-bold mb-6 leading-tight">
-              Are Your Passwords a Weak Link?
-            </h2>
-            <p className="text-lg text-stone-400 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
-              Remembering dozens of complex passwords is tough. Many of us use simple ones or reuse them, making us easy targets for online threats.
+        {/* Features Section */}
+        <section id="features" className="w-full px-6 py-20 max-w-7xl">
+          <div className="text-center mb-16">
+            <span className="text-red-500 text-sm font-bold uppercase tracking-wider mb-4 block">Comprehensive Features</span>
+            <h2 className="text-3xl md:text-5xl font-bold mb-6 leading-tight">Everything You Need for Password Security</h2>
+            <p className="text-lg text-stone-400 max-w-3xl mx-auto">
+              From secure storage to intelligent analytics, SecureVault provides all the tools to manage and protect your digital identity.
             </p>
           </div>
-          <div className="flex-1 w-full max-w-lg">
-            <div className="aspect-video w-full rounded-lg bg-stone-900 flex items-center justify-center p-8 border border-stone-700 shadow-xl relative overflow-hidden">
-              <MdWarning className="text-red-500 text-7xl absolute opacity-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
-              <div className="bg-black/50 rounded p-3 flex justify-between items-center border border-stone-800 w-full max-w-sm z-10">
-                <div className="flex gap-2">
-                  {[...Array(5)].map((_, i) => (
-                    <div key={i} className="h-2 w-2 rounded-full bg-white opacity-30"></div>
-                  ))}
-                </div>
-                <span className="text-red-400 text-xs font-mono">Weak</span>
-              </div>
-              <p className="absolute bottom-4 text-sm text-stone-500 z-10">"password123" is easily guessed!</p>
+
+          {/* Authentication & Security */}
+          <div className="mb-20">
+            <div className="flex items-center gap-3 mb-8">
+              <FaShieldAlt className="text-red-500 text-3xl" />
+              <h3 className="text-2xl md:text-3xl font-bold">Authentication & Security</h3>
             </div>
-          </div>
-        </section>
-
-        {/* Solution: Password Generator */}
-        <section className="w-full px-6 py-20 max-w-7xl flex flex-col lg:flex-row-reverse items-center gap-12">
-          <div className="flex-1 text-center lg:text-left">
-            <span className="text-red-500 text-sm font-bold uppercase tracking-wider mb-4 block">SecureVault's Answer</span>
-            <h2 className="text-3xl md:text-5xl font-bold mb-6 leading-tight">
-              Generate Super Strong Passwords Instantly
-            </h2>
-            <p className="text-lg text-stone-400 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
-              Our built-in Smart Generator creates unique, uncrackable passwords for every account. Say goodbye to guesswork and hello to true security.
-            </p>
-            <Button 
-              className="mt-8 h-12 px-8 rounded-full bg-red-500 text-black font-bold text-base hover:scale-105 transition-transform shadow-[0_0_20px_rgba(234,40,49,0.3)] mx-auto lg:mx-0"
-            >
-              <FaKey className="mr-2" />
-              Try the Generator
-            </Button>
-          </div>
-          <div className="flex-1 w-full max-w-lg">
-            <div className="aspect-video w-full rounded-lg bg-stone-900 flex items-center justify-center p-8 border border-stone-700 shadow-xl relative overflow-hidden">
-              <MdAutoAwesome className="text-red-500 text-7xl absolute opacity-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
-              <div className="bg-black/50 rounded p-3 flex justify-between items-center border border-stone-800 w-full max-w-sm z-10">
-                <div className="flex gap-2">
-                  {[...Array(8)].map((_, i) => (
-                    <div key={i} className="h-2 w-2 rounded-full bg-white"></div>
-                  ))}
-                </div>
-                <span className="text-red-500 text-xs font-mono">Strong</span>
-              </div>
-              <p className="absolute bottom-4 text-sm text-stone-500 z-10">One click, total protection.</p>
-            </div>
-          </div>
-        </section>
-
-        {/* Divider */}
-        <div className="w-full max-w-7xl px-6 py-8 flex justify-center">
-          <div className="w-20 h-1 rounded-full bg-red-500/50"></div>
-        </div>
-
-        {/* Step 2: Concern */}
-        <section className="w-full px-6 py-20 max-w-7xl flex flex-col lg:flex-row items-center gap-12 bg-stone-900/50 rounded-xl my-8">
-          <div className="flex-1 text-center lg:text-left">
-            <span className="text-red-500 text-sm font-bold uppercase tracking-wider mb-4 block">Step 2: The Concern</span>
-            <h2 className="text-3xl md:text-5xl font-bold mb-6 leading-tight">
-              Worried About Your Private Information?
-            </h2>
-            <p className="text-lg text-stone-400 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
-              Data breaches are common. Without strong protection, your personal info, credit cards, and logins could be exposed. How do you keep it truly safe?
-            </p>
-          </div>
-          <div className="flex-1 w-full max-w-lg">
-            <div className="aspect-video w-full rounded-lg bg-stone-900 flex items-center justify-center p-8 border border-stone-700 shadow-xl relative overflow-hidden">
-              <MdCloudOff className="text-red-500 text-7xl absolute opacity-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
-              <div className="flex flex-col items-center gap-4 bg-stone-800/80 p-6 rounded-lg border border-stone-700 max-w-xs mx-auto z-10">
-                <MdWarning className="text-red-500 text-5xl" />
-                <p className="text-sm text-stone-400 text-center">Your data could be at risk without encryption.</p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Solution: Encryption */}
-        <section className="w-full px-6 py-20 max-w-7xl flex flex-col lg:flex-row-reverse items-center gap-12">
-          <div className="flex-1 text-center lg:text-left">
-            <span className="text-red-500 text-sm font-bold uppercase tracking-wider mb-4 block">SecureVault's Answer</span>
-            <h2 className="text-3xl md:text-5xl font-bold mb-6 leading-tight">
-              Your Information is Encrypted, Just for You
-            </h2>
-            <p className="text-lg text-stone-400 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
-              We use AES-256 encryption, the highest standard, to lock away your data. Even we can't see what's inside your vault – it's your private fortress.
-            </p>
-            <Button 
-              className="mt-8 h-12 px-8 rounded-full bg-red-500 text-black font-bold text-base hover:scale-105 transition-transform shadow-[0_0_20px_rgba(234,40,49,0.3)] mx-auto lg:mx-0"
-            >
-              <MdEnhancedEncryption className="mr-2 text-lg" />
-              Discover Our Security
-            </Button>
-          </div>
-          <div className="flex-1 w-full max-w-lg">
-            <div className="relative w-full aspect-4/3 rounded-xl overflow-hidden shadow-2xl bg-stone-900 border border-stone-800 flex items-center justify-center">
-              <div className="absolute inset-0 bg-linear-to-br from-stone-800 to-black opacity-90 z-0"></div>
-              <div className="relative z-10 p-8 flex flex-col h-full justify-center items-center">
-                <FaLock className="text-red-500 text-9xl" />
-                <p className="text-white text-xl text-center font-bold mt-4">Your Data is Secure</p>
-              </div>
-              <div className="absolute -right-4 top-10 bg-red-500 text-black px-4 py-2 rounded-lg font-bold shadow-lg transform rotate-3 flex items-center gap-2 z-20">
-                <MdVerifiedUser className="text-sm" />
-                AES-256
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Divider */}
-        <div className="w-full max-w-7xl px-6 py-8 flex justify-center">
-          <div className="w-20 h-1 rounded-full bg-red-500/50"></div>
-        </div>
-
-        {/* Step 3: Dilemma */}
-        <section className="w-full px-6 py-20 max-w-7xl flex flex-col lg:flex-row items-center gap-12 bg-stone-900/50 rounded-xl my-8">
-          <div className="flex-1 text-center lg:text-left">
-            <span className="text-red-500 text-sm font-bold uppercase tracking-wider mb-4 block">Step 3: The Dilemma</span>
-            <h2 className="text-3xl md:text-5xl font-bold mb-6 leading-tight">
-              Need to Share Logins Securely?
-            </h2>
-            <p className="text-lg text-stone-400 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
-              Sharing Netflix passwords or Wi-Fi codes with family, or work credentials with a team, can be risky. How do you share without compromising security?
-            </p>
-          </div>
-          <div className="flex-1 w-full max-w-lg">
-            <div className="aspect-video w-full rounded-lg bg-stone-900 flex items-center justify-center p-8 border border-stone-700 shadow-xl relative overflow-hidden">
-              <MdVisibilityOff className="text-red-500 text-7xl absolute opacity-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
-              <div className="flex flex-col items-center gap-4 bg-stone-800/80 p-6 rounded-lg border border-stone-700 max-w-xs mx-auto z-10">
-                <FaUsers className="text-orange-400 text-5xl" />
-                <p className="text-sm text-stone-400 text-center">Sharing passwords unsafely leads to risks.</p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Solution: Secure Sharing */}
-        <section className="w-full px-6 py-20 max-w-7xl flex flex-col lg:flex-row-reverse items-center gap-12">
-          <div className="flex-1 text-center lg:text-left">
-            <span className="text-red-500 text-sm font-bold uppercase tracking-wider mb-4 block">SecureVault's Answer</span>
-            <h2 className="text-3xl md:text-5xl font-bold mb-6 leading-tight">
-              Share Safely, Without Showing the Secret
-            </h2>
-            <p className="text-lg text-stone-400 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
-              SecureVault lets you share access to accounts with family or colleagues without ever revealing the actual password. Control who sees what, always.
-            </p>
-            <Button 
-              className="mt-8 h-12 px-8 rounded-full bg-red-500 text-black font-bold text-base hover:scale-105 transition-transform shadow-[0_0_20px_rgba(234,40,49,0.3)] mx-auto lg:mx-0"
-            >
-              <MdFolderShared className="mr-2 text-lg" />
-              Learn About Sharing
-            </Button>
-          </div>
-          <div className="flex-1 w-full max-w-lg">
-            <div className="relative w-full aspect-4/3 rounded-xl overflow-hidden shadow-2xl bg-stone-900 border border-stone-800 group flex items-center justify-center">
-              <div className="absolute inset-0 bg-linear-to-br from-stone-800 to-black opacity-90 z-0"></div>
-              <div className="relative z-10 p-8 flex flex-col h-full justify-center gap-4">
-                <div className="w-full bg-stone-900/80 backdrop-blur-xl border border-stone-700 rounded-lg p-4 flex items-center gap-3">
-                  <div className="h-8 w-8 rounded-full bg-green-500/20 flex items-center justify-center text-green-400">
-                    <FaUserCircle className="text-xl" />
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <Card className="bg-stone-900/80 border-stone-800 hover:border-red-500/50 transition-all duration-300 cursor-pointer group">
+                <CardContent className="p-6">
+                  <div className="flex items-start gap-4">
+                    <div className="p-3 bg-red-500/20 rounded-lg text-red-400 group-hover:scale-110 transition-transform">
+                      <FaLock className="text-2xl" />
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-bold text-lg mb-2">Email/Password Auth</h4>
+                      <p className="text-sm text-stone-400">Secure registration with validation, email-based login, and password recovery</p>
+                    </div>
                   </div>
-                  <div className="flex-1">
-                    <p className="text-sm text-white">Family Access</p>
-                    <p className="text-xs text-stone-500">Shared "Streaming Services"</p>
+                </CardContent>
+              </Card>
+
+              <Card className="bg-stone-900/80 border-stone-800 hover:border-red-500/50 transition-all duration-300 cursor-pointer group">
+                <CardContent className="p-6">
+                  <div className="flex items-start gap-4">
+                    <div className="p-3 bg-blue-500/20 rounded-lg text-blue-400 group-hover:scale-110 transition-transform">
+                      <FaGoogle className="text-2xl" />
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-bold text-lg mb-2">Google OAuth 2.0</h4>
+                      <p className="text-sm text-stone-400">One-click sign-in with Google for seamless authentication</p>
+                    </div>
                   </div>
-                  <MdVisibilityOff className="text-stone-500 text-lg" />
-                </div>
-                <div className="w-full bg-stone-900/80 backdrop-blur-xl border border-stone-700 rounded-lg p-4 flex items-center gap-3">
-                  <div className="h-8 w-8 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-400">
-                    <FaUsers className="text-xl" />
+                </CardContent>
+              </Card>
+
+              <Card className="bg-stone-900/80 border-stone-800 hover:border-red-500/50 transition-all duration-300 cursor-pointer group">
+                <CardContent className="p-6">
+                  <div className="flex items-start gap-4">
+                    <div className="p-3 bg-purple-500/20 rounded-lg text-purple-400 group-hover:scale-110 transition-transform">
+                      <MdQrCode2 className="text-2xl" />
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-bold text-lg mb-2">Two-Factor Auth (2FA)</h4>
+                      <p className="text-sm text-stone-400">TOTP-based authentication with QR codes and recovery codes for maximum security</p>
+                    </div>
                   </div>
-                  <div className="flex-1">
-                    <p className="text-sm text-white">Team Access</p>
-                    <p className="text-xs text-stone-500">Shared "Project Accounts"</p>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+
+          {/* Password Vault */}
+          <div className="mb-20">
+            <div className="flex items-center gap-3 mb-8">
+              <MdPassword className="text-red-500 text-3xl" />
+              <h3 className="text-2xl md:text-3xl font-bold">Password Vault</h3>
+            </div>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <Card onClick={() => navigate('/vault')} className="bg-stone-900/80 border-stone-800 hover:border-red-500/50 transition-all duration-300 cursor-pointer group">
+                <CardContent className="p-6">
+                  <div className="flex items-start gap-4">
+                    <div className="p-3 bg-green-500/20 rounded-lg text-green-400 group-hover:scale-110 transition-transform">
+                      <FaKey className="text-2xl" />
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-bold text-lg mb-2">Secure Storage</h4>
+                      <p className="text-sm text-stone-400">Add, edit, delete passwords with encryption. Show/hide toggle and clipboard support</p>
+                      <span className="text-xs text-red-400 mt-2 inline-block">→ Go to Vault</span>
+                    </div>
                   </div>
-                  <MdVisibilityOff className="text-stone-500 text-lg" />
-                </div>
-              </div>
-              <div className="absolute -right-4 top-10 bg-red-500 text-black px-4 py-2 rounded-lg font-bold shadow-lg transform rotate-3 flex items-center gap-2 z-20">
-                <MdHandshake className="text-sm" />
-                Controlled Sharing
-              </div>
+                </CardContent>
+              </Card>
+
+              <Card onClick={() => navigate('/vault')} className="bg-stone-900/80 border-stone-800 hover:border-red-500/50 transition-all duration-300 cursor-pointer group">
+                <CardContent className="p-6">
+                  <div className="flex items-start gap-4">
+                    <div className="p-3 bg-yellow-500/20 rounded-lg text-yellow-400 group-hover:scale-110 transition-transform">
+                      <MdCategory className="text-2xl" />
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-bold text-lg mb-2">Smart Categories</h4>
+                      <p className="text-sm text-stone-400">Organize by Social, Email, Banking, Work, and custom categories with icons</p>
+                      <span className="text-xs text-red-400 mt-2 inline-block">→ Go to Vault</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card onClick={() => navigate('/vault')} className="bg-stone-900/80 border-stone-800 hover:border-red-500/50 transition-all duration-300 cursor-pointer group">
+                <CardContent className="p-6">
+                  <div className="flex items-start gap-4">
+                    <div className="p-3 bg-cyan-500/20 rounded-lg text-cyan-400 group-hover:scale-110 transition-transform">
+                      <BiSearch className="text-2xl" />
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-bold text-lg mb-2">Search & Filter</h4>
+                      <p className="text-sm text-stone-400">Real-time search, filter by category and strength, grid/list views, pagination</p>
+                      <span className="text-xs text-red-400 mt-2 inline-block">→ Go to Vault</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card onClick={() => navigate('/vault')} className="bg-stone-900/80 border-stone-800 hover:border-red-500/50 transition-all duration-300 cursor-pointer group">
+                <CardContent className="p-6">
+                  <div className="flex items-start gap-4">
+                    <div className="p-3 bg-orange-500/20 rounded-lg text-orange-400 group-hover:scale-110 transition-transform">
+                      <FaChartBar className="text-2xl" />
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-bold text-lg mb-2">Strength Indicators</h4>
+                      <p className="text-sm text-stone-400">Visual strength meters: Weak, Medium, Strong, Very Strong with color coding</p>
+                      <span className="text-xs text-red-400 mt-2 inline-block">→ Go to Vault</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card onClick={() => navigate('/vault')} className="bg-stone-900/80 border-stone-800 hover:border-red-500/50 transition-all duration-300 cursor-pointer group">
+                <CardContent className="p-6">
+                  <div className="flex items-start gap-4">
+                    <div className="p-3 bg-pink-500/20 rounded-lg text-pink-400 group-hover:scale-110 transition-transform">
+                      <FaCopy className="text-2xl" />
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-bold text-lg mb-2">Quick Actions</h4>
+                      <p className="text-sm text-stone-400">Copy to clipboard, favorites/starred passwords, detailed notes field</p>
+                      <span className="text-xs text-red-400 mt-2 inline-block">→ Go to Vault</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card onClick={() => navigate('/vault')} className="bg-stone-900/80 border-stone-800 hover:border-red-500/50 transition-all duration-300 cursor-pointer group">
+                <CardContent className="p-6">
+                  <div className="flex items-start gap-4">
+                    <div className="p-3 bg-indigo-500/20 rounded-lg text-indigo-400 group-hover:scale-110 transition-transform">
+                      <FaFilter className="text-2xl" />
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-bold text-lg mb-2">Advanced Sorting</h4>
+                      <p className="text-sm text-stone-400">Sort by newest, oldest, or password strength. Customizable items per page</p>
+                      <span className="text-xs text-red-400 mt-2 inline-block">→ Go to Vault</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+
+          {/* Dashboard & Analytics */}
+          <div className="mb-20">
+            <div className="flex items-center gap-3 mb-8">
+              <MdDashboard className="text-red-500 text-3xl" />
+              <h3 className="text-2xl md:text-3xl font-bold">Dashboard & Analytics</h3>
+            </div>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <Card onClick={() => navigate('/dashboard')} className="bg-stone-900/80 border-stone-800 hover:border-red-500/50 transition-all duration-300 cursor-pointer group">
+                <CardContent className="p-6">
+                  <div className="flex items-start gap-4">
+                    <div className="p-3 bg-red-500/20 rounded-lg text-red-400 group-hover:scale-110 transition-transform">
+                      <FaChartBar className="text-2xl" />
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-bold text-lg mb-2">Key Statistics</h4>
+                      <p className="text-sm text-stone-400">Total passwords count, security score (0-100%), duplicate detection</p>
+                      <span className="text-xs text-red-400 mt-2 inline-block">→ Go to Dashboard</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card onClick={() => navigate('/dashboard')} className="bg-stone-900/80 border-stone-800 hover:border-red-500/50 transition-all duration-300 cursor-pointer group">
+                <CardContent className="p-6">
+                  <div className="flex items-start gap-4">
+                    <div className="p-3 bg-purple-500/20 rounded-lg text-purple-400 group-hover:scale-110 transition-transform">
+                      <MdAutoAwesome className="text-2xl" />
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-bold text-lg mb-2">Visual Charts</h4>
+                      <p className="text-sm text-stone-400">Interactive bar charts, pie charts, area charts with click-to-filter navigation</p>
+                      <span className="text-xs text-red-400 mt-2 inline-block">→ Go to Dashboard</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card onClick={() => navigate('/dashboard')} className="bg-stone-900/80 border-stone-800 hover:border-red-500/50 transition-all duration-300 cursor-pointer group">
+                <CardContent className="p-6">
+                  <div className="flex items-start gap-4">
+                    <div className="p-3 bg-blue-500/20 rounded-lg text-blue-400 group-hover:scale-110 transition-transform">
+                      <FaHistory className="text-2xl" />
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-bold text-lg mb-2">Recent Activity</h4>
+                      <p className="text-sm text-stone-400">Timeline of last 10 passwords with time-ago formatting and quick navigation</p>
+                      <span className="text-xs text-red-400 mt-2 inline-block">→ Go to Dashboard</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card onClick={() => navigate('/dashboard')} className="bg-stone-900/80 border-stone-800 hover:border-red-500/50 transition-all duration-300 cursor-pointer group">
+                <CardContent className="p-6">
+                  <div className="flex items-start gap-4">
+                    <div className="p-3 bg-amber-500/20 rounded-lg text-amber-400 group-hover:scale-110 transition-transform">
+                      <FaExclamationTriangle className="text-2xl" />
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-bold text-lg mb-2">Password Health</h4>
+                      <p className="text-sm text-stone-400">Duplicate detection, old password alerts (6+ months), age distribution</p>
+                      <span className="text-xs text-red-400 mt-2 inline-block">→ Go to Dashboard</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card onClick={() => navigate('/dashboard')} className="bg-stone-900/80 border-stone-800 hover:border-red-500/50 transition-all duration-300 cursor-pointer group">
+                <CardContent className="p-6">
+                  <div className="flex items-start gap-4">
+                    <div className="p-3 bg-green-500/20 rounded-lg text-green-400 group-hover:scale-110 transition-transform">
+                      <MdCategory className="text-2xl" />
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-bold text-lg mb-2">Category Distribution</h4>
+                      <p className="text-sm text-stone-400">Interactive pie chart with percentages and click-to-filter functionality</p>
+                      <span className="text-xs text-red-400 mt-2 inline-block">→ Go to Dashboard</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card onClick={() => navigate('/dashboard')} className="bg-stone-900/80 border-stone-800 hover:border-red-500/50 transition-all duration-300 cursor-pointer group">
+                <CardContent className="p-6">
+                  <div className="flex items-start gap-4">
+                    <div className="p-3 bg-teal-500/20 rounded-lg text-teal-400 group-hover:scale-110 transition-transform">
+                      <MdSecurity className="text-2xl" />
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-bold text-lg mb-2">Security Insights</h4>
+                      <p className="text-sm text-stone-400">Strength breakdown, health recommendations, actionable security tips</p>
+                      <span className="text-xs text-red-400 mt-2 inline-block">→ Go to Dashboard</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+
+          {/* Password Generator & Tools */}
+          <div className="mb-20">
+            <div className="flex items-center gap-3 mb-8">
+              <MdAutoAwesome className="text-red-500 text-3xl" />
+              <h3 className="text-2xl md:text-3xl font-bold">Password Generator & Security Tools</h3>
+            </div>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <Card onClick={() => navigate('/generator')} className="bg-stone-900/80 border-stone-800 hover:border-red-500/50 transition-all duration-300 cursor-pointer group">
+                <CardContent className="p-6">
+                  <div className="flex items-start gap-4">
+                    <div className="p-3 bg-red-500/20 rounded-lg text-red-400 group-hover:scale-110 transition-transform">
+                      <FaKey className="text-2xl" />
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-bold text-lg mb-2">Smart Generator</h4>
+                      <p className="text-sm text-stone-400">Create passwords 8-50 chars with customizable uppercase, lowercase, numbers, symbols</p>
+                      <span className="text-xs text-red-400 mt-2 inline-block">→ Generate Password</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card onClick={() => navigate('/generator')} className="bg-stone-900/80 border-stone-800 hover:border-red-500/50 transition-all duration-300 cursor-pointer group">
+                <CardContent className="p-6">
+                  <div className="flex items-start gap-4">
+                    <div className="p-3 bg-green-500/20 rounded-lg text-green-400 group-hover:scale-110 transition-transform">
+                      <MdAutoAwesome className="text-2xl" />
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-bold text-lg mb-2">Real-Time Analysis</h4>
+                      <p className="text-sm text-stone-400">Instant strength meter, visual indicators, save directly to vault</p>
+                      <span className="text-xs text-red-400 mt-2 inline-block">→ Generate Password</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card onClick={() => navigate('/check-breach')} className="bg-stone-900/80 border-stone-800 hover:border-red-500/50 transition-all duration-300 cursor-pointer group">
+                <CardContent className="p-6">
+                  <div className="flex items-start gap-4">
+                    <div className="p-3 bg-orange-500/20 rounded-lg text-orange-400 group-hover:scale-110 transition-transform">
+                      <MdWarning className="text-2xl" />
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-bold text-lg mb-2">Breach Monitoring</h4>
+                      <p className="text-sm text-stone-400">Check if passwords have been compromised with detailed security recommendations</p>
+                      <span className="text-xs text-red-400 mt-2 inline-block">→ Check Breaches</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+
+          {/* User Profile & Settings */}
+          <div className="mb-20">
+            <div className="flex items-center gap-3 mb-8">
+              <FaUserCircle className="text-red-500 text-3xl" />
+              <h3 className="text-2xl md:text-3xl font-bold">User Profile & Settings</h3>
+            </div>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <Card onClick={() => navigate('/profile')} className="bg-stone-900/80 border-stone-800 hover:border-red-500/50 transition-all duration-300 cursor-pointer group">
+                <CardContent className="p-6">
+                  <div className="flex items-start gap-4">
+                    <div className="p-3 bg-purple-500/20 rounded-lg text-purple-400 group-hover:scale-110 transition-transform">
+                      <FaUserCircle className="text-2xl" />
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-bold text-lg mb-2">Account Management</h4>
+                      <p className="text-sm text-stone-400">Update name, email, password with verification. View account details</p>
+                      <span className="text-xs text-red-400 mt-2 inline-block">→ Manage Profile</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card onClick={() => navigate('/profile')} className="bg-stone-900/80 border-stone-800 hover:border-red-500/50 transition-all duration-300 cursor-pointer group">
+                <CardContent className="p-6">
+                  <div className="flex items-start gap-4">
+                    <div className="p-3 bg-indigo-500/20 rounded-lg text-indigo-400 group-hover:scale-110 transition-transform">
+                      <MdQrCode2 className="text-2xl" />
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-bold text-lg mb-2">2FA Setup Wizard</h4>
+                      <p className="text-sm text-stone-400">3-step MFA wizard: recovery codes → QR scan → verification</p>
+                      <span className="text-xs text-red-400 mt-2 inline-block">→ Enable 2FA</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="bg-stone-900/80 border-stone-800 hover:border-red-500/50 transition-all duration-300 cursor-pointer group">
+                <CardContent className="p-6">
+                  <div className="flex items-start gap-4">
+                    <div className="p-3 bg-pink-500/20 rounded-lg text-pink-400 group-hover:scale-110 transition-transform">
+                      <MdVerifiedUser className="text-2xl" />
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-bold text-lg mb-2">Session Security</h4>
+                      <p className="text-sm text-stone-400">Protected routes, automatic timeout, secure session management</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
             </div>
           </div>
         </section>
 
         {/* Security Priority Section */}
-        <section className="w-full py-10 px-6">
-          <div className="max-w-7xl mx-auto rounded-2xl overflow-hidden relative h-100 bg-stone-900 flex items-center justify-center">
-            <div className="absolute inset-0 bg-linear-to-t from-[#22040b] to-transparent z-10"></div>
-            <div className="relative z-20 text-center max-w-2xl px-4">
-              <FaShieldAlt className="text-6xl text-red-500 mb-4 mx-auto" />
-              <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">Your digital safety is our priority.</h2>
-              <p className="text-stone-300 text-lg">Join us on a journey to a safer, simpler online life.</p>
+        <section id="security" className="w-full py-20 px-6 bg-stone-900/50">
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center mb-16">
+              <span className="text-red-500 text-sm font-bold uppercase tracking-wider mb-4 block">Military-Grade Security</span>
+              <h2 className="text-3xl md:text-5xl font-bold mb-6 leading-tight">Your Security is Our Top Priority</h2>
+              <p className="text-lg text-stone-400 max-w-3xl mx-auto">
+                Built on industry-leading standards and best practices to keep your data absolutely secure.
+              </p>
             </div>
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <Card className="bg-black/50 border-red-500/30 hover:border-red-500 transition-all duration-300">
+                <CardContent className="p-6 text-center">
+                  <div className="p-4 bg-red-500/20 rounded-full w-fit mx-auto mb-4">
+                    <MdEnhancedEncryption className="text-4xl text-red-400" />
+                  </div>
+                  <h4 className="font-bold text-lg mb-2">AES-128 GCM Encryption</h4>
+                  <p className="text-sm text-stone-400">Industry-standard encryption protects your data at rest</p>
+                </CardContent>
+              </Card>
+
+              <Card className="bg-black/50 border-red-500/30 hover:border-red-500 transition-all duration-300">
+                <CardContent className="p-6 text-center">
+                  <div className="p-4 bg-blue-500/20 rounded-full w-fit mx-auto mb-4">
+                    <MdVerifiedUser className="text-4xl text-blue-400" />
+                  </div>
+                  <h4 className="font-bold text-lg mb-2">SOC 2 Type I Certified</h4>
+                  <p className="text-sm text-stone-400">Enterprise-grade security via Appwrite Cloud</p>
+                </CardContent>
+              </Card>
+
+              <Card className="bg-black/50 border-red-500/30 hover:border-red-500 transition-all duration-300">
+                <CardContent className="p-6 text-center">
+                  <div className="p-4 bg-purple-500/20 rounded-full w-fit mx-auto mb-4">
+                    <MdSecurity className="text-4xl text-purple-400" />
+                  </div>
+                  <h4 className="font-bold text-lg mb-2">Argon2 Password Hashing</h4>
+                  <p className="text-sm text-stone-400">Passwords secured with award-winning hashing algorithm</p>
+                </CardContent>
+              </Card>
+
+              <Card className="bg-black/50 border-red-500/30 hover:border-red-500 transition-all duration-300">
+                <CardContent className="p-6 text-center">
+                  <div className="p-4 bg-green-500/20 rounded-full w-fit mx-auto mb-4">
+                    <FaCheckCircle className="text-4xl text-green-400" />
+                  </div>
+                  <h4 className="font-bold text-lg mb-2">HTTPS/TLS Enforced</h4>
+                  <p className="text-sm text-stone-400">All data encrypted in transit with TLS certificates</p>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </section>
+
+        {/* Roadmap Section */}
+        <section id="roadmap" className="w-full px-6 py-20 max-w-7xl">
+          <div className="text-center mb-16">
+            <span className="text-red-500 text-sm font-bold uppercase tracking-wider mb-4 block">What's Coming Next</span>
+            <h2 className="text-3xl md:text-5xl font-bold mb-6 leading-tight">Upcoming Features</h2>
+            <p className="text-lg text-stone-400 max-w-3xl mx-auto">
+              We're constantly evolving to bring you the best password management experience. Here's what's on the horizon.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <Card className="bg-linear-to-br from-stone-900 to-stone-800 border-stone-700 relative overflow-hidden group">
+              <div className="absolute top-2 right-2 px-3 py-1 bg-red-500 text-black text-xs font-bold rounded-full">Soon</div>
+              <CardContent className="p-6">
+                <div className="flex items-start gap-4">
+                  <div className="p-3 bg-blue-500/20 rounded-lg text-blue-400 group-hover:scale-110 transition-transform">
+                    <MdFolderShared className="text-2xl" />
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="font-bold text-lg mb-2">Password Sharing</h4>
+                    <p className="text-sm text-stone-400">Securely share passwords with family and team members without revealing them</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-linear-to-br from-stone-900 to-stone-800 border-stone-700 relative overflow-hidden group">
+              <div className="absolute top-2 right-2 px-3 py-1 bg-yellow-500 text-black text-xs font-bold rounded-full">Planned</div>
+              <CardContent className="p-6">
+                <div className="flex items-start gap-4">
+                  <div className="p-3 bg-purple-500/20 rounded-lg text-purple-400 group-hover:scale-110 transition-transform">
+                    <FaHistory className="text-2xl" />
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="font-bold text-lg mb-2">Password History</h4>
+                    <p className="text-sm text-stone-400">Track changes and restore previous versions of your passwords</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-linear-to-br from-stone-900 to-stone-800 border-stone-700 relative overflow-hidden group">
+              <div className="absolute top-2 right-2 px-3 py-1 bg-green-500 text-black text-xs font-bold rounded-full">In Dev</div>
+              <CardContent className="p-6">
+                <div className="flex items-start gap-4">
+                  <div className="p-3 bg-green-500/20 rounded-lg text-green-400 group-hover:scale-110 transition-transform">
+                    <MdImportExport className="text-2xl" />
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="font-bold text-lg mb-2">Import/Export</h4>
+                    <p className="text-sm text-stone-400">Import from other managers and export your data in CSV/JSON formats</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-linear-to-br from-stone-900 to-stone-800 border-stone-700 relative overflow-hidden group">
+              <div className="absolute top-2 right-2 px-3 py-1 bg-orange-500 text-black text-xs font-bold rounded-full">Q1 2026</div>
+              <CardContent className="p-6">
+                <div className="flex items-start gap-4">
+                  <div className="p-3 bg-orange-500/20 rounded-lg text-orange-400 group-hover:scale-110 transition-transform">
+                    <MdDevices className="text-2xl" />
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="font-bold text-lg mb-2">Browser Extension</h4>
+                    <p className="text-sm text-stone-400">Auto-fill passwords directly in your browser with Chrome, Firefox, Edge support</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-linear-to-br from-stone-900 to-stone-800 border-stone-700 relative overflow-hidden group">
+              <div className="absolute top-2 right-2 px-3 py-1 bg-purple-500 text-black text-xs font-bold rounded-full">Future</div>
+              <CardContent className="p-6">
+                <div className="flex items-start gap-4">
+                  <div className="p-3 bg-pink-500/20 rounded-lg text-pink-400 group-hover:scale-110 transition-transform">
+                    <MdNotifications className="text-2xl" />
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="font-bold text-lg mb-2">Expiration Reminders</h4>
+                    <p className="text-sm text-stone-400">Get notified when passwords are old and need updating</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-linear-to-br from-stone-900 to-stone-800 border-stone-700 relative overflow-hidden group">
+              <div className="absolute top-2 right-2 px-3 py-1 bg-cyan-500 text-black text-xs font-bold rounded-full">Future</div>
+              <CardContent className="p-6">
+                <div className="flex items-start gap-4">
+                  <div className="p-3 bg-cyan-500/20 rounded-lg text-cyan-400 group-hover:scale-110 transition-transform">
+                    <MdFingerprint className="text-2xl" />
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="font-bold text-lg mb-2">Biometric Auth</h4>
+                    <p className="text-sm text-stone-400">Unlock with fingerprint or face recognition on mobile devices</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-linear-to-br from-stone-900 to-stone-800 border-stone-700 relative overflow-hidden group">
+              <div className="absolute top-2 right-2 px-3 py-1 bg-indigo-500 text-black text-xs font-bold rounded-full">Future</div>
+              <CardContent className="p-6">
+                <div className="flex items-start gap-4">
+                  <div className="p-3 bg-indigo-500/20 rounded-lg text-indigo-400 group-hover:scale-110 transition-transform">
+                    <FaUsers className="text-2xl" />
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="font-bold text-lg mb-2">Team/Family Plans</h4>
+                    <p className="text-sm text-stone-400">Shared vaults for families and teams with role-based access</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-linear-to-br from-stone-900 to-stone-800 border-stone-700 relative overflow-hidden group">
+              <div className="absolute top-2 right-2 px-3 py-1 bg-red-500 text-black text-xs font-bold rounded-full">Research</div>
+              <CardContent className="p-6">
+                <div className="flex items-start gap-4">
+                  <div className="p-3 bg-red-500/20 rounded-lg text-red-400 group-hover:scale-110 transition-transform">
+                    <MdWarning className="text-2xl" />
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="font-bold text-lg mb-2">Advanced Breach Monitoring</h4>
+                    <p className="text-sm text-stone-400">Real-time breach alerts and dark web monitoring</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-linear-to-br from-stone-900 to-stone-800 border-stone-700 relative overflow-hidden group">
+              <div className="absolute top-2 right-2 px-3 py-1 bg-teal-500 text-black text-xs font-bold rounded-full">Q2 2026</div>
+              <CardContent className="p-6">
+                <div className="flex items-start gap-4">
+                  <div className="p-3 bg-teal-500/20 rounded-lg text-teal-400 group-hover:scale-110 transition-transform">
+                    <MdDevices className="text-2xl" />
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="font-bold text-lg mb-2">Mobile App</h4>
+                    <p className="text-sm text-stone-400">Native iOS and Android apps with offline access</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </section>
 
@@ -343,26 +707,27 @@ function Home() {
             <div className="absolute bottom-0 left-0 w-64 h-64 bg-black opacity-10 rounded-full blur-3xl transform -translate-x-1/2 translate-y-1/2"></div>
             <div className="relative z-10 flex flex-col items-center text-center gap-6">
               <h2 className="text-3xl md:text-5xl font-bold text-stone-900 leading-tight max-w-3xl">
-                Ready to embrace true online security?
+                Ready to secure your digital life?
               </h2>
               <p className="text-stone-800 text-lg md:text-xl max-w-2xl font-medium">
-                Take the first step towards a worry-free digital life with SecureVault.
+                Join thousands who trust SecureVault for complete password security and peace of mind.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 w-full justify-center mt-6">
                 <Button 
                   onClick={() => navigate('/signup')}
                   className="h-14 px-8 rounded-full bg-black text-white font-bold text-lg hover:bg-stone-800 transition-colors shadow-xl"
                 >
-                  Start My Free Journey
+                  Get Started Free
                 </Button>
                 <Button 
+                  onClick={() => navigate('/login')}
                   variant="outline"
                   className="h-14 px-8 rounded-full bg-white/50 border border-black/10 text-stone-900 font-bold text-lg hover:bg-white/80 transition-colors"
                 >
-                  Explore All Features
+                  Sign In
                 </Button>
               </div>
-              <p className="text-xs font-bold uppercase tracking-widest mt-8 opacity-60">No credit card required</p>
+              <p className="text-xs font-bold uppercase tracking-widest mt-8 opacity-60">No credit card required • Secure by default</p>
             </div>
           </div>
         </section>
@@ -373,35 +738,37 @@ function Home() {
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between gap-10">
           <div className="flex flex-col gap-4">
             <div className="flex items-center gap-2">
-              <FaShieldAlt className="text-red-500" />
+              <FaShieldAlt className="text-red-500 text-2xl" />
               <h3 className="font-bold text-xl">SecureVault</h3>
             </div>
             <p className="text-stone-400 text-sm max-w-xs">
-              Your trusted guide to a secure digital world.
+              Your complete password management solution with military-grade security.
             </p>
           </div>
           <div className="flex flex-wrap gap-12 md:gap-24">
             <div className="flex flex-col gap-4">
-              <h4 className="font-bold">Journey</h4>
-              <a className="text-stone-400 hover:text-red-500 text-sm cursor-pointer">Start Here</a>
-              <a className="text-stone-400 hover:text-red-500 text-sm cursor-pointer">Our Solutions</a>
-              <a className="text-stone-400 hover:text-red-500 text-sm cursor-pointer">Security Principles</a>
+              <h4 className="font-bold">Features</h4>
+              <a onClick={() => navigate('/vault')} className="text-stone-400 hover:text-red-500 text-sm cursor-pointer">Password Vault</a>
+              <a onClick={() => navigate('/dashboard')} className="text-stone-400 hover:text-red-500 text-sm cursor-pointer">Dashboard</a>
+              <a onClick={() => navigate('/generator')} className="text-stone-400 hover:text-red-500 text-sm cursor-pointer">Password Generator</a>
+              <a onClick={() => navigate('/check-breach')} className="text-stone-400 hover:text-red-500 text-sm cursor-pointer">Breach Check</a>
             </div>
             <div className="flex flex-col gap-4">
-              <h4 className="font-bold">Company</h4>
-              <a className="text-stone-400 hover:text-red-500 text-sm cursor-pointer">About Us</a>
-              <a className="text-stone-400 hover:text-red-500 text-sm cursor-pointer">Support</a>
-              <a className="text-stone-400 hover:text-red-500 text-sm cursor-pointer">Contact</a>
+              <h4 className="font-bold">Account</h4>
+              <a onClick={() => navigate('/signup')} className="text-stone-400 hover:text-red-500 text-sm cursor-pointer">Sign Up</a>
+              <a onClick={() => navigate('/login')} className="text-stone-400 hover:text-red-500 text-sm cursor-pointer">Login</a>
+              <a onClick={() => navigate('/profile')} className="text-stone-400 hover:text-red-500 text-sm cursor-pointer">Profile Settings</a>
             </div>
             <div className="flex flex-col gap-4">
-              <h4 className="font-bold">Legal</h4>
-              <a className="text-stone-400 hover:text-red-500 text-sm cursor-pointer">Privacy Policy</a>
-              <a className="text-stone-400 hover:text-red-500 text-sm cursor-pointer">Terms of Service</a>
+              <h4 className="font-bold">Resources</h4>
+              <a href="#features" className="text-stone-400 hover:text-red-500 text-sm cursor-pointer">All Features</a>
+              <a href="#security" className="text-stone-400 hover:text-red-500 text-sm cursor-pointer">Security</a>
+              <a href="#roadmap" className="text-stone-400 hover:text-red-500 text-sm cursor-pointer">Roadmap</a>
             </div>
           </div>
         </div>
         <div className="max-w-7xl mx-auto mt-12 pt-8 border-t border-red-500/20 text-center md:text-left text-sm text-stone-500">
-          © 2025 SecureVault Inc. All rights reserved.
+          © 2025 SecureVault. All rights reserved. Built with React 19 & Appwrite.
         </div>
       </footer>
     </div>
