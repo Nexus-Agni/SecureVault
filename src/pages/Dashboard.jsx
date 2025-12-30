@@ -133,14 +133,14 @@ function Dashboard() {
 
       <div className="md:ml-64 flex flex-col min-h-screen">
         <header className="sticky top-0 z-20 bg-stone-900/95 backdrop-blur-sm border-b border-stone-700">
-          <div className="flex items-center justify-between px-6 py-4">
-            <div className="flex items-center gap-4">
+          <div className="flex items-center justify-between px-4 sm:px-6 py-4 pt-16 md:pt-4">
+            <div className="flex items-center gap-3 sm:gap-4">
               <div className="w-10 h-10 rounded-full bg-linear-to-br from-red-500/20 to-red-600/20 border-2 border-red-500/40 flex items-center justify-center">
                 <FaTachometerAlt className="text-red-500 text-xl" />
               </div>
               <div>
-                <h1 className="text-white text-2xl font-bold">Dashboard</h1>
-                <p className="text-stone-400 text-sm">Overview & Statistics</p>
+                <h1 className="text-white text-xl sm:text-2xl font-bold">Dashboard</h1>
+                <p className="text-stone-400 text-xs sm:text-sm">Overview & Statistics</p>
               </div>
             </div>
           </div>
@@ -152,12 +152,12 @@ function Dashboard() {
               <Loader />
             </div>
           ) : (
-            <div className="p-4 md:p-8 max-w-350 mx-auto">
+            <div className="p-4 sm:p-6 md:p-8 max-w-350 mx-auto">
               {/* Stats Cards */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-                <Card className="bg-linear-to-br from-stone-900/95 via-black/95 to-stone-900/95 border-stone-700 p-6">
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-full bg-blue-500/20 border border-blue-500/30 flex items-center justify-center">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 mb-4 sm:mb-6">
+                <Card className="bg-linear-to-br from-stone-900/95 via-black/95 to-stone-900/95 border-stone-700 p-4 sm:p-6">
+                  <div className="flex items-center gap-3 sm:gap-4">
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-blue-500/20 border border-blue-500/30 flex items-center justify-center flex-shrink-0">
                       <FaLock className="text-blue-500 text-xl" />
                     </div>
                     <div>

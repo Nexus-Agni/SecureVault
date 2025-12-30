@@ -27,6 +27,7 @@ function UserProfile() {
     const [showEmailModal, setShowEmailModal] = useState(false);
     const [showPasswordModal, setShowPasswordModal] = useState(false);
     const [showMFAModal, setShowMFAModal] = useState(false);
+    const [mfaEnabled, setMfaEnabled] = useState(false);
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -35,6 +36,9 @@ function UserProfile() {
                 setUser(userData);
                 setUpdatedName(userData.name || "");
                 setUpdatedEmail(userData.email || "");
+                
+                // Check MFA status from user object
+                setMfaEnabled(userData.mfa || false);
             } catch (error) {
                 toast.error("Please log in to access your profile");
                 navigate('/login');
@@ -140,6 +144,25 @@ function UserProfile() {
         }
     }
 
+    const handleMFAButton = () => {
+        if (mfaEnabled) {
+            toast.info("Two-factor authentication is already enabled and cannot be disabled for security reasons.");
+        } else {
+            setShowMFAModal(true);
+        }
+    }
+
+    const handleMFAClose = async () => {
+        setShowMFAModal(false);
+        // Refresh MFA status after enabling
+        try {
+            const userData = await account.get();
+            setMfaEnabled(userData.mfa || false);
+        } catch (error) {
+            console.log("MFA status refresh error:", error);
+        }
+    }
+
     return (
         <div className="min-h-screen bg-linear-to-br from-[#22040b] via-[#120006] to-black flex">
             {/* Shared Sidebar */}
@@ -148,15 +171,15 @@ function UserProfile() {
             {/* Main Content */}
             <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
                 {/* Header */}
-                <header className="sticky top-0 z-20 bg-stone-900/95 backdrop-blur-sm border-b border-stone-700">
-                    <div className="flex items-center justify-between px-6 py-4">
-                        <div className="flex items-center gap-4">
-                            <div className="w-10 h-10 rounded-full bg-linear-to-br from-red-500/20 to-red-600/20 border-2 border-red-500/40 flex items-center justify-center">
-                                <FaUserCircle className="text-red-500 text-xl" />
+                <header className="sticky top-0 z-20 bg-stone-900/95 backdrop-blur-sm border-b border-stone-700 pt-16 md:pt-0">
+                    <div className="flex items-center justify-between px-4 sm:px-6 py-4">
+                        <div className="flex items-center gap-3 sm:gap-4">
+                            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-linear-to-br from-red-500/20 to-red-600/20 border-2 border-red-500/40 flex items-center justify-center">
+                                <FaUserCircle className="text-red-500 text-lg sm:text-xl" />
                             </div>
                             <div>
-                                <h1 className="text-white text-2xl font-bold">Profile Settings</h1>
-                                <p className="text-stone-400 text-sm">Manage your account details</p>
+                                <h1 className="text-white text-xl sm:text-2xl font-bold">Profile Settings</h1>
+                                <p className="text-stone-400 text-xs sm:text-sm">Manage your account details</p>
                             </div>
                         </div>
                     </div>
@@ -169,25 +192,25 @@ function UserProfile() {
                             <Loader />
                         </div>
                     ) : (
-                        <div className="max-w-225 mx-auto p-4 md:p-8">
+                        <div className="max-w-225 mx-auto p-4 sm:p-6 md:p-8">
                             {/* User Info Card */}
-                            <Card className="bg-linear-to-br from-stone-900/95 via-black/95 to-stone-900/95 border-stone-700 p-8 mb-6">
-                                <div className="flex items-center gap-6">
-                                    <div className="w-20 h-20 rounded-full bg-linear-to-br from-red-500/20 to-red-600/20 border-4 border-red-500/40 flex items-center justify-center">
-                                        <FaUserCircle className="text-red-500 text-5xl" />
+                            <Card className="bg-linear-to-br from-stone-900/95 via-black/95 to-stone-900/95 border-stone-700 p-4 sm:p-6 md:p-8 mb-4 sm:mb-6">
+                                <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6">
+                                    <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-linear-to-br from-red-500/20 to-red-600/20 border-4 border-red-500/40 flex items-center justify-center flex-shrink-0">
+                                        <FaUserCircle className="text-red-500 text-4xl sm:text-5xl" />
                                     </div>
-                                    <div className="flex-1">
-                                        <h2 className="text-white text-2xl font-bold">{user?.name || 'User'}</h2>
-                                        <p className="text-stone-400">{user?.email}</p>
-                                        <p className="text-stone-500 text-sm mt-1">
+                                    <div className="flex-1 text-center sm:text-left">
+                                        <h2 className="text-white text-xl sm:text-2xl font-bold">{user?.name || 'User'}</h2>
+                                        <p className="text-stone-400 text-sm sm:text-base break-all">{user?.email}</p>
+                                        <p className="text-stone-500 text-xs sm:text-sm mt-1">
                                             Joined: {new Date(user?.$createdAt).toLocaleDateString()}
                                         </p>
                                     </div>
                                 </div>
                             </Card>
 
-                            {/* Action Buttons */}2 lg:grid-cols-4
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            {/* Action Buttons */}
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
                                 {/* Update Name Button */}
                                 <button
                                     onClick={() => setShowNameModal(true)}
@@ -236,18 +259,34 @@ function UserProfile() {
                                     </div>
                                 </button>
 
-                                {/* Enable 2FA Button */}
+                                {/* 2FA Status Button */}
                                 <button
-                                    onClick={() => setShowMFAModal(true)}
-                                    className="group bg-linear-to-br from-stone-900/95 via-black/95 to-stone-900/95 border border-stone-700 hover:border-purple-500/50 rounded-xl p-6 transition-all duration-300 hover:shadow-[0_0_30px_rgba(168,85,247,0.2)]"
+                                    onClick={handleMFAButton}
+                                    className={`group bg-linear-to-br from-stone-900/95 via-black/95 to-stone-900/95 border border-stone-700 rounded-xl p-6 transition-all duration-300 ${
+                                        mfaEnabled 
+                                            ? 'cursor-default border-green-500/30' 
+                                            : 'hover:border-purple-500/50 hover:shadow-[0_0_30px_rgba(168,85,247,0.2)] cursor-pointer'
+                                    }`}
                                 >
                                     <div className="flex flex-col items-center gap-4">
-                                        <div className="w-16 h-16 rounded-full bg-purple-500/20 border-2 border-purple-500/30 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                                            <FaShieldAlt className="text-purple-500 text-2xl" />
+                                        <div className={`w-16 h-16 rounded-full border-2 flex items-center justify-center transition-transform duration-300 ${
+                                            mfaEnabled
+                                                ? 'bg-green-500/20 border-green-500/30'
+                                                : 'bg-purple-500/20 border-purple-500/30 group-hover:scale-110'
+                                        }`}>
+                                            {mfaEnabled ? (
+                                                <FaCheck className="text-green-500 text-2xl" />
+                                            ) : (
+                                                <FaShieldAlt className="text-purple-500 text-2xl" />
+                                            )}
                                         </div>
                                         <div>
-                                            <h3 className="text-white font-bold text-lg mb-1">Enable 2FA</h3>
-                                            <p className="text-stone-400 text-sm">Two-factor authentication</p>
+                                            <h3 className="text-white font-bold text-lg mb-1">
+                                                {mfaEnabled ? '2FA Enabled' : 'Enable 2FA'}
+                                            </h3>
+                                            <p className="text-stone-400 text-sm">
+                                                {mfaEnabled ? 'Your account is protected' : 'Add extra security to your account'}
+                                            </p>
                                         </div>
                                     </div>
                                 </button>
@@ -489,7 +528,7 @@ function UserProfile() {
             )}            
             {/* Create MFA Modal */}
             {showMFAModal && (
-                <CreateMFA onClose={() => setShowMFAModal(false)} />
+                <CreateMFA onClose={handleMFAClose} />
             )}        </div>
     );
 }

@@ -1,6 +1,6 @@
 import { account, avatars } from "@/lib/appwrite";
 import { toast } from "sonner";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -17,6 +17,31 @@ function CreateMFA({ onClose }) {
     const [loading, setLoading] = useState(false);
     const [codesCopied, setCodesCopied] = useState(false);
     
+    // Check if MFA factors already exist on mount
+    useEffect(() => {
+        const checkMfaFactors = async () => {
+            try {
+                setLoading(true);
+                const factors = await account.listMfaFactors();
+                
+                // If TOTP is already configured, just enable MFA and close
+                if (factors.totp) {
+                    await account.updateMFA(true);
+                    toast.success("Two-factor authentication enabled successfully!");
+                    onClose?.();
+                    return;
+                }
+            } catch (error) {
+                console.log("MFA factors check error:", error);
+                // If error, proceed with normal setup flow
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        checkMfaFactors();
+    }, [onClose]);
+    
     const createMFArecoveryCodes = async () => {
         try {
             setLoading(true);
@@ -25,7 +50,15 @@ function CreateMFA({ onClose }) {
             setStep(2);
             toast.success("Recovery codes generated");
         } catch (error) {
-            toast.error(error.message || "Something went wrong while creating MFA recovery codes");
+            // If recovery codes already exist, skip to next step
+            if (error.message && error.message.includes("already generated recovery codes")) {
+                toast.info("Recovery codes already exist. Proceeding to authenticator setup...");
+                setStep(2);
+                // Move to QR code generation immediately
+                createAuthenticatorAppQRAndSecretKey();
+            } else {
+                toast.error(error.message || "Something went wrong while creating MFA recovery codes");
+            }
         } finally {
             setLoading(false);
         }

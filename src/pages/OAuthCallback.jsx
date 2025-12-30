@@ -57,11 +57,11 @@ function OAuthCallback() {
     }, [navigate]);
 
     return (
-        <div className="min-h-screen bg-linear-to-br from-[#22040b] via-[#120006] to-black flex items-center justify-center">
+        <div className="min-h-screen bg-linear-to-br from-[#22040b] via-[#120006] to-black flex items-center justify-center px-4">
             <div className="text-center">
                 <Loader />
-                <p className="text-white mt-4 text-lg">Completing authentication...</p>
-                <p className="text-stone-400 text-sm mt-2">Please wait while we verify your credentials</p>
+                <p className="text-white mt-4 text-base sm:text-lg">Completing authentication...</p>
+                <p className="text-stone-400 text-xs sm:text-sm mt-2">Please wait while we verify your credentials</p>
             </div>
         </div>
     );

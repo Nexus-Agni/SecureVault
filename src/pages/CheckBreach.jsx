@@ -37,27 +37,27 @@ function CheckBreach() {
       {/* Main Content */}
       <div className="md:ml-64 flex flex-col min-h-screen">
         {/* Header */}
-        <header className="sticky top-0 z-20 bg-stone-900/95 backdrop-blur-sm border-b border-stone-700">
-          <div className="flex items-center justify-between px-6 py-4">
-            <div className="flex items-center gap-4">
-              <div className="w-10 h-10 rounded-full bg-linear-to-br from-red-500/20 to-red-600/20 border-2 border-red-500/40 flex items-center justify-center">
-                <FaExclamationTriangle className="text-red-500 text-xl" />
+        <header className="sticky top-0 z-20 bg-stone-900/95 backdrop-blur-sm border-b border-stone-700 pt-16 md:pt-0">
+          <div className="flex items-center justify-between px-4 sm:px-6 py-4">
+            <div className="flex items-center gap-3 sm:gap-4">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-linear-to-br from-red-500/20 to-red-600/20 border-2 border-red-500/40 flex items-center justify-center">
+                <FaExclamationTriangle className="text-red-500 text-lg sm:text-xl" />
               </div>
               <div>
-                <h1 className="text-white text-2xl font-bold">Check Breach</h1>
-                <p className="text-stone-400 text-sm">Verify if your accounts have been compromised</p>
+                <h1 className="text-white text-xl sm:text-2xl font-bold">Check Breach</h1>
+                <p className="text-stone-400 text-xs sm:text-sm hidden sm:block">Verify if your accounts have been compromised</p>
               </div>
             </div>
           </div>
         </header>
 
         {/* Main Content Area */}
-        <main className="flex-1 overflow-y-auto p-8">
+        <main className="flex-1 overflow-y-auto p-4 sm:p-6 md:p-8">
           <div className="max-w-2xl mx-auto">
             {/* Check Form */}
-            <Card className="bg-linear-to-br from-stone-900/95 via-black/95 to-stone-900/95 border-stone-700 p-8 mb-6">
-              <div className="text-center mb-6">
-                <FaShieldAlt className="text-5xl text-red-500 mx-auto mb-4" />
+            <Card className="bg-linear-to-br from-stone-900/95 via-black/95 to-stone-900/95 border-stone-700 p-4 sm:p-6 md:p-8 mb-4 sm:mb-6">
+              <div className="text-center mb-4 sm:mb-6">
+                <FaShieldAlt className="text-4xl sm:text-5xl text-red-500 mx-auto mb-3 sm:mb-4" />
                 <h2 className="text-2xl font-bold text-white mb-2">Security Breach Check</h2>
                 <p className="text-stone-400">
                   Enter your email address to check if it has been part of any known data breaches

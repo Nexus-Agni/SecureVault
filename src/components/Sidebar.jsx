@@ -9,8 +9,10 @@ import {
   FaKey, 
   FaExclamationTriangle,
   FaUserCircle,
-  FaSignOutAlt
+  FaSignOutAlt,
+  FaTimes
 } from 'react-icons/fa';
+import { MdMenu } from 'react-icons/md';
 import { Button } from '@/components/ui/button';
 import { Loader } from './Loader';
 
@@ -19,6 +21,7 @@ function Sidebar() {
   const location = useLocation();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -81,8 +84,15 @@ function Sidebar() {
     }
   };
 
-  return (
-    <aside className="hidden md:flex w-64 flex-col bg-stone-900/50 border-r border-stone-700 fixed left-0 top-0 h-screen">
+  const handleNavigation = (path) => {
+    navigate(path);
+    setMobileMenuOpen(false);
+  };
+
+  const closeMobileMenu = () => setMobileMenuOpen(false);
+
+  const SidebarContent = () => (
+    <>
       {/* Logo Section */}
       <div className="p-4 border-b border-stone-700">
         <div className="flex items-center gap-3">
@@ -106,7 +116,7 @@ function Sidebar() {
             return (
               <button
                 key={item.path}
-                onClick={() => navigate(item.path)}
+                onClick={() => handleNavigation(item.path)}
                 className={`group flex items-start gap-3 px-3 py-3 rounded-lg transition-all border-l-4 ${
                   active
                     ? 'bg-stone-800 text-white border-red-500 shadow-[0_0_15px_rgba(239,68,68,0.2)]'
@@ -131,7 +141,7 @@ function Sidebar() {
         {user && (
           <div className="mb-4">
             <button
-              onClick={() => navigate('/profile')}
+              onClick={() => handleNavigation('/profile')}
               className="flex items-center gap-3 mb-3 w-full hover:bg-stone-800/50 p-2 rounded-lg transition-colors duration-200"
             >
               <div className="w-10 h-10 rounded-full bg-linear-to-br from-red-500/20 to-red-600/20 border-2 border-red-500/40 flex items-center justify-center">
@@ -163,7 +173,48 @@ function Sidebar() {
           </p>
         </div>
       </div>
-    </aside>
+    </>
+  );
+
+  return (
+    <>
+      {/* Mobile Menu Button */}
+      <button
+        onClick={() => setMobileMenuOpen(true)}
+        className="md:hidden fixed top-4 left-4 z-40 p-2 bg-stone-900 border border-stone-700 rounded-lg shadow-lg hover:bg-stone-800 transition-colors"
+        aria-label="Open menu"
+      >
+        <MdMenu className="text-2xl text-white" />
+      </button>
+
+      {/* Desktop Sidebar */}
+      <aside className="hidden md:flex w-64 flex-col bg-stone-900/50 border-r border-stone-700 fixed left-0 top-0 h-screen">
+        <SidebarContent />
+      </aside>
+
+      {/* Mobile Sidebar Overlay */}
+      {mobileMenuOpen && (
+        <>
+          <div 
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 md:hidden"
+            onClick={closeMobileMenu}
+          />
+          <aside className="fixed top-0 left-0 h-full w-64 bg-stone-900 border-r border-stone-700 z-50 md:hidden transform transition-transform duration-300 ease-in-out flex flex-col">
+            <div className="flex items-center justify-between p-4 border-b border-stone-700">
+              <h3 className="font-bold text-lg text-white">Menu</h3>
+              <button 
+                onClick={closeMobileMenu}
+                className="p-2 hover:bg-stone-800 rounded-lg transition-colors"
+                aria-label="Close menu"
+              >
+                <FaTimes className="text-xl text-white" />
+              </button>
+            </div>
+            <SidebarContent />
+          </aside>
+        </>
+      )}
+    </>
   );
 }
 

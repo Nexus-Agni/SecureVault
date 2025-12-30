@@ -62,17 +62,17 @@ function Login() {
   
   return (
     <div className="min-h-screen bg-linear-to-br from-[#22040b] via-[#120006] to-black text-neutral-100">
-      <div className="mx-auto flex min-h-screen max-w-5xl flex-col px-6 py-8">
+      <div className="mx-auto flex min-h-screen max-w-5xl flex-col px-4 sm:px-6 py-6 sm:py-8">
         <AuthHeader />
 
-        <div className="mt-10 flex flex-1 items-center justify-center">
+        <div className="mt-6 sm:mt-10 flex flex-1 items-center justify-center">
           <Card className="w-full max-w-110 border-red-500/20 bg-linear-to-br from-neutral-900/95 via-black/95 to-neutral-900/95 shadow-[0_0_60px_rgba(239,68,68,0.25),0_0_100px_rgba(239,68,68,0.1)] backdrop-blur-xl">
-            <CardHeader className="text-center">
-              <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full border-2 border-red-500/40 bg-linear-to-br from-red-500/20 to-red-600/10 text-red-400 shadow-[0_0_30px_rgba(239,68,68,0.3)]">
-                <FaLock className="h-7 w-7" />
+            <CardHeader className="text-center px-4 sm:px-6">
+              <div className="mx-auto mb-3 sm:mb-4 flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-full border-2 border-red-500/40 bg-linear-to-br from-red-500/20 to-red-600/10 text-red-400 shadow-[0_0_30px_rgba(239,68,68,0.3)]">
+                <FaLock className="h-6 w-6 sm:h-7 sm:w-7" />
               </div>
-              <CardTitle className="text-3xl text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]">Welcome Back</CardTitle>
-              <CardDescription className="text-neutral-300">Enter your credentials to access your vault.</CardDescription>
+              <CardTitle className="text-2xl sm:text-3xl text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]">Welcome Back</CardTitle>
+              <CardDescription className="text-neutral-300 text-sm sm:text-base">Enter your credentials to access your vault.</CardDescription>
             </CardHeader>
             <CardContent>
               <form onSubmit={loginHandler} className="flex flex-col gap-4">

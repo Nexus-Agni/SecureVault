@@ -1,29 +1,32 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { FaShieldAlt, FaLock, FaKey, FaCheckCircle, FaUserCircle, FaPlayCircle, FaUsers, FaChartBar, FaGoogle, FaHistory, FaCopy, FaFilter, FaExclamationTriangle } from 'react-icons/fa'
+import { FaShieldAlt, FaLock, FaKey, FaCheckCircle, FaUserCircle, FaPlayCircle, FaUsers, FaChartBar, FaGoogle, FaHistory, FaCopy, FaFilter, FaExclamationTriangle, FaTimes } from 'react-icons/fa'
 import { MdSecurity, MdVerifiedUser, MdAutoAwesome, MdCloudOff, MdWarning, MdEnhancedEncryption, MdVisibilityOff, MdFolderShared, MdHandshake, MdMenu, MdMoreVert, MdPassword, MdDashboard, MdCategory, MdQrCode2, MdDevices, MdImportExport, MdNotifications, MdFingerprint } from 'react-icons/md'
 import { BiSearch } from 'react-icons/bi'
 
 function Home() {
   const navigate = useNavigate()
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+
+  const closeMobileMenu = () => setMobileMenuOpen(false)
 
   return (
     <div className="relative flex min-h-screen w-full flex-col overflow-x-hidden bg-linear-to-br from-[#22040b] via-[#120006] to-black text-stone-100">
       {/* Navbar */}
       <div className="sticky top-0 z-50 w-full backdrop-blur-md bg-[#22040b]/80 border-b border-red-500/20">
-        <div className="flex items-center justify-between px-6 py-4 max-w-7xl mx-auto">
-          <div className="flex items-center gap-3">
-            <FaShieldAlt className="text-red-500 text-3xl" />
-            <h2 className="text-xl font-bold tracking-tight">SecureVault</h2>
+        <div className="flex items-center justify-between px-4 sm:px-6 py-4 max-w-7xl mx-auto">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <FaShieldAlt className="text-red-500 text-2xl sm:text-3xl" />
+            <h2 className="text-lg sm:text-xl font-bold tracking-tight">SecureVault</h2>
           </div>
           <div className="hidden md:flex items-center gap-8">
             <a href="#features" className="text-sm font-medium hover:text-red-500 transition-colors cursor-pointer">Features</a>
             <a href="#security" className="text-sm font-medium hover:text-red-500 transition-colors cursor-pointer">Security</a>
             <a href="#roadmap" className="text-sm font-medium hover:text-red-500 transition-colors cursor-pointer">Roadmap</a>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 sm:gap-4">
             <Button 
               onClick={() => navigate('/login')}
               variant="ghost"
@@ -37,32 +40,104 @@ function Home() {
             >
               Sign Up
             </Button>
-            <button className="md:hidden p-2">
+            <button 
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="md:hidden p-2 hover:bg-stone-800 rounded-lg transition-colors"
+              aria-label="Toggle menu"
+            >
               <MdMenu className="text-2xl" />
             </button>
           </div>
         </div>
       </div>
 
+      {/* Mobile Menu */}
+      {mobileMenuOpen && (
+        <>
+          <div 
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 md:hidden"
+            onClick={closeMobileMenu}
+          />
+          <div className="fixed top-0 right-0 h-full w-64 bg-[#22040b] border-l border-red-500/20 z-50 md:hidden transform transition-transform duration-300 ease-in-out">
+            <div className="flex flex-col h-full">
+              <div className="flex items-center justify-between p-4 border-b border-red-500/20">
+                <h3 className="font-bold text-lg">Menu</h3>
+                <button 
+                  onClick={closeMobileMenu}
+                  className="p-2 hover:bg-stone-800 rounded-lg transition-colors"
+                  aria-label="Close menu"
+                >
+                  <FaTimes className="text-xl" />
+                </button>
+              </div>
+              <nav className="flex-1 p-4 flex flex-col gap-2">
+                <a 
+                  href="#features" 
+                  onClick={closeMobileMenu}
+                  className="px-4 py-3 hover:bg-stone-800 rounded-lg text-sm font-medium transition-colors"
+                >
+                  Features
+                </a>
+                <a 
+                  href="#security" 
+                  onClick={closeMobileMenu}
+                  className="px-4 py-3 hover:bg-stone-800 rounded-lg text-sm font-medium transition-colors"
+                >
+                  Security
+                </a>
+                <a 
+                  href="#roadmap" 
+                  onClick={closeMobileMenu}
+                  className="px-4 py-3 hover:bg-stone-800 rounded-lg text-sm font-medium transition-colors"
+                >
+                  Roadmap
+                </a>
+              </nav>
+              <div className="p-4 border-t border-red-500/20 flex flex-col gap-3">
+                <Button 
+                  onClick={() => {
+                    navigate('/login')
+                    closeMobileMenu()
+                  }}
+                  variant="outline"
+                  className="w-full h-11 rounded-full text-stone-300 hover:text-white hover:bg-stone-800 border border-stone-700 font-medium"
+                >
+                  Login
+                </Button>
+                <Button 
+                  onClick={() => {
+                    navigate('/signup')
+                    closeMobileMenu()
+                  }}
+                  className="w-full h-11 rounded-full bg-red-500 text-black font-bold hover:brightness-110 shadow-[0_0_15px_rgba(234,40,49,0.3)]"
+                >
+                  Sign Up
+                </Button>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+
       <main className="grow flex flex-col items-center">
         {/* Hero Section */}
-        <section className="w-full px-6 py-12 md:py-24 max-w-7xl">
-          <div className="flex flex-col-reverse lg:flex-row gap-12 items-center">
-            <div className="flex flex-col gap-6 flex-1 text-center lg:text-left">
+        <section className="w-full px-4 sm:px-6 py-8 sm:py-12 md:py-24 max-w-7xl">
+          <div className="flex flex-col-reverse lg:flex-row gap-8 lg:gap-12 items-center">
+            <div className="flex flex-col gap-4 sm:gap-6 flex-1 text-center lg:text-left">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-red-500/20 bg-red-500/10 w-fit mx-auto lg:mx-0">
                 <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
                 <span className="text-xs font-medium uppercase tracking-wider text-red-400">Your Guide to Digital Safety</span>
               </div>
-              <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold leading-[1.1] tracking-tight">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.1] tracking-tight">
                 Secure Your Digital Life with <span className="text-transparent bg-clip-text bg-linear-to-r from-red-500 to-yellow-200">Industry-Grade Protection</span>
               </h1>
-              <p className="text-lg text-stone-400 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+              <p className="text-base sm:text-lg text-stone-400 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
                 A complete password management solution with 2FA, breach monitoring, analytics, and smart password generation. Your passwords, secured and organized.
               </p>
-              <div className="flex flex-wrap gap-4 justify-center lg:justify-start pt-4">
+              <div className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 justify-center lg:justify-start pt-2 sm:pt-4">
                 <Button 
                   onClick={() => navigate('/signup')}
-                  className="h-12 px-8 rounded-full bg-red-500 text-black font-bold text-base hover:scale-105 transition-transform shadow-[0_0_20px_rgba(234,40,49,0.3)]"
+                  className="h-11 sm:h-12 px-6 sm:px-8 rounded-full bg-red-500 text-black font-bold text-sm sm:text-base hover:scale-105 transition-transform shadow-[0_0_20px_rgba(234,40,49,0.3)]"
                 >
                   <FaPlayCircle className="mr-2" />
                   Get Started Free
@@ -146,7 +221,7 @@ function Home() {
               <FaShieldAlt className="text-red-500 text-3xl" />
               <h3 className="text-2xl md:text-3xl font-bold">Authentication & Security</h3>
             </div>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               <Card className="bg-stone-900/80 border-stone-800 hover:border-red-500/50 transition-all duration-300 cursor-pointer group">
                 <CardContent className="p-6">
                   <div className="flex items-start gap-4">
@@ -197,7 +272,7 @@ function Home() {
               <MdPassword className="text-red-500 text-3xl" />
               <h3 className="text-2xl md:text-3xl font-bold">Password Vault</h3>
             </div>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               <Card onClick={() => navigate('/vault')} className="bg-stone-900/80 border-stone-800 hover:border-red-500/50 transition-all duration-300 cursor-pointer group">
                 <CardContent className="p-6">
                   <div className="flex items-start gap-4">
@@ -296,7 +371,7 @@ function Home() {
               <MdDashboard className="text-red-500 text-3xl" />
               <h3 className="text-2xl md:text-3xl font-bold">Dashboard & Analytics</h3>
             </div>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               <Card onClick={() => navigate('/dashboard')} className="bg-stone-900/80 border-stone-800 hover:border-red-500/50 transition-all duration-300 cursor-pointer group">
                 <CardContent className="p-6">
                   <div className="flex items-start gap-4">
@@ -395,7 +470,7 @@ function Home() {
               <MdAutoAwesome className="text-red-500 text-3xl" />
               <h3 className="text-2xl md:text-3xl font-bold">Password Generator & Security Tools</h3>
             </div>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               <Card onClick={() => navigate('/generator')} className="bg-stone-900/80 border-stone-800 hover:border-red-500/50 transition-all duration-300 cursor-pointer group">
                 <CardContent className="p-6">
                   <div className="flex items-start gap-4">
@@ -449,7 +524,7 @@ function Home() {
               <FaUserCircle className="text-red-500 text-3xl" />
               <h3 className="text-2xl md:text-3xl font-bold">User Profile & Settings</h3>
             </div>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               <Card onClick={() => navigate('/profile')} className="bg-stone-900/80 border-stone-800 hover:border-red-500/50 transition-all duration-300 cursor-pointer group">
                 <CardContent className="p-6">
                   <div className="flex items-start gap-4">
@@ -508,7 +583,7 @@ function Home() {
               </p>
             </div>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
               <Card className="bg-black/50 border-red-500/30 hover:border-red-500 transition-all duration-300">
                 <CardContent className="p-6 text-center">
                   <div className="p-4 bg-red-500/20 rounded-full w-fit mx-auto mb-4">
@@ -562,7 +637,7 @@ function Home() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             <Card className="bg-linear-to-br from-stone-900 to-stone-800 border-stone-700 relative overflow-hidden group">
               <div className="absolute top-2 right-2 px-3 py-1 bg-red-500 text-black text-xs font-bold rounded-full">Soon</div>
               <CardContent className="p-6">

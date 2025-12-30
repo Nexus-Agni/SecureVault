@@ -304,24 +304,24 @@ function Vault() {
       <div className="md:ml-64 flex flex-col min-h-screen">
         {/* Header */}
         <header className="sticky top-0 z-20 bg-stone-900/95 backdrop-blur-sm border-b border-stone-700">
-          <div className="flex items-center justify-between px-6 py-4">
-            <div className="flex items-center gap-4">
+          <div className="flex items-center justify-between px-4 sm:px-6 py-4 pt-16 md:pt-4">
+            <div className="flex items-center gap-3 sm:gap-4">
               <div className="w-10 h-10 rounded-full bg-linear-to-br from-red-500/20 to-red-600/20 border-2 border-red-500/40 flex items-center justify-center">
                 <FaLock className="text-red-500 text-xl" />
               </div>
               <div>
-                <h1 className="text-white text-2xl font-bold">Vault</h1>
-                <p className="text-stone-400 text-sm">Secure Password Manager</p>
+                <h1 className="text-white text-xl sm:text-2xl font-bold">Vault</h1>
+                <p className="text-stone-400 text-xs sm:text-sm hidden sm:block">Secure Password Manager</p>
               </div>
             </div>
 
             <Button
               onClick={() => setShowAddModal(true)}
               disabled={loading}
-              className="bg-linear-to-r from-red-600 to-red-500 hover:from-red-700 hover:to-red-600 text-white rounded-full h-10 px-6 shadow-[0_0_20px_rgba(239,68,68,0.3)] disabled:opacity-50 disabled:cursor-not-allowed"
+              className="bg-linear-to-r from-red-600 to-red-500 hover:from-red-700 hover:to-red-600 text-white rounded-full h-9 sm:h-10 px-3 sm:px-6 text-sm shadow-[0_0_20px_rgba(239,68,68,0.3)] disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <FaPlus className="mr-2" />
-              Add New Item
+              <FaPlus className="sm:mr-2" />
+              <span className="hidden sm:inline">Add New Item</span>
             </Button>
           </div>
         </header>
@@ -333,15 +333,15 @@ function Vault() {
               <Loader />
             </div>
           ) : (
-          <div className="max-w-350 mx-auto p-4 md:p-8">
+          <div className="max-w-350 mx-auto p-4 sm:p-6 md:p-8">
             {/* Page Header */}
-            <div className="flex flex-wrap justify-between items-end gap-3 pb-4 border-b border-stone-700 mb-6">
+            <div className="flex flex-col sm:flex-row sm:flex-wrap justify-between items-start sm:items-end gap-3 pb-4 border-b border-stone-700 mb-4 sm:mb-6">
               <div>
-                <h2 className="text-white text-3xl font-bold">My Vault</h2>
-                <p className="text-stone-400 text-sm mt-1">Manage your passwords and secure notes</p>
+                <h2 className="text-white text-2xl sm:text-3xl font-bold">My Vault</h2>
+                <p className="text-stone-400 text-xs sm:text-sm mt-1">Manage your passwords and secure notes</p>
               </div>
               <div className="flex items-center gap-2">
-                <span className="bg-stone-800 text-red-500 text-xs font-bold px-3 py-1 rounded-full border border-red-500/20">
+                <span className="bg-stone-800 text-red-500 text-xs font-bold px-2 sm:px-3 py-1 rounded-full border border-red-500/20">
                   Total Items: {passwords.length}
                 </span>
               </div>
