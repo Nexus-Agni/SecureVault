@@ -96,8 +96,8 @@ function Sidebar() {
       {/* Logo Section */}
       <div className="p-4 border-b border-stone-700">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-linear-to-br from-red-500/20 to-red-600/20 border-2 border-red-500/40 flex items-center justify-center">
-            <FaShieldAlt className="text-red-500 text-xl" />
+          <div className="w-10 h-10 rounded-full bg-linear-to-br from-red-500/20 to-red-600/20 border-2 border-red-500/40 flex items-center justify-center p-1.5">
+            <img src="/logo.png" alt="SecureVault Logo" className="w-full h-full object-contain" />
           </div>
           <div>
             <h2 className="text-white text-lg font-bold">SecureVault</h2>

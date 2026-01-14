@@ -18,7 +18,7 @@ function Home() {
       <div className="sticky top-0 z-50 w-full backdrop-blur-md bg-[#22040b]/80 border-b border-red-500/20">
         <div className="flex items-center justify-between px-4 sm:px-6 py-4 max-w-7xl mx-auto">
           <div className="flex items-center gap-2 sm:gap-3">
-            <FaShieldAlt className="text-red-500 text-2xl sm:text-3xl" />
+            <img src="/logo.png" alt="SecureVault Logo" className="h-15 w-15 sm:h-15 sm:w-15 object-contain" />
             <h2 className="text-lg sm:text-xl font-bold tracking-tight">SecureVault</h2>
           </div>
           <div className="hidden md:flex items-center gap-8">
@@ -813,11 +813,11 @@ function Home() {
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between gap-10">
           <div className="flex flex-col gap-4">
             <div className="flex items-center gap-2">
-              <FaShieldAlt className="text-red-500 text-2xl" />
+              <img src="/logo.png" alt="SecureVault Logo" className="h-20 w-20 object-contain" />
               <h3 className="font-bold text-xl">SecureVault</h3>
             </div>
             <p className="text-stone-400 text-sm max-w-xs">
-              Your complete password management solution with military-grade security.
+              Your complete password management solution with industry-grade security.
             </p>
           </div>
           <div className="flex flex-wrap gap-12 md:gap-24">
@@ -843,7 +843,7 @@ function Home() {
           </div>
         </div>
         <div className="max-w-7xl mx-auto mt-12 pt-8 border-t border-red-500/20 text-center md:text-left text-sm text-stone-500">
-          © 2025 SecureVault. All rights reserved. Built with React 19 & Appwrite.
+          © 2025 SecureVault. All rights reserved with Agnibha Chakraborty. Built with React 19 & Appwrite.
         </div>
       </footer>
     </div>
