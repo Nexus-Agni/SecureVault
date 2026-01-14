@@ -196,7 +196,7 @@ function UserProfile() {
                             {/* User Info Card */}
                             <Card className="bg-linear-to-br from-stone-900/95 via-black/95 to-stone-900/95 border-stone-700 p-4 sm:p-6 md:p-8 mb-4 sm:mb-6">
                                 <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6">
-                                    <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-linear-to-br from-red-500/20 to-red-600/20 border-4 border-red-500/40 flex items-center justify-center flex-shrink-0">
+                                    <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-linear-to-br from-red-500/20 to-red-600/20 border-4 border-red-500/40 flex items-center justify-center shrink-0">
                                         <FaUserCircle className="text-red-500 text-4xl sm:text-5xl" />
                                     </div>
                                     <div className="flex-1 text-center sm:text-left">

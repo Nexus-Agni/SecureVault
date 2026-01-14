@@ -126,22 +126,37 @@ A modern, secure, and feature-rich password management system built with React a
 ### 🛡️ Security Features
 
 - **Password Breach Checking**
-  - Check if passwords have been compromised
-  - Integration with breach databases
-  - Security recommendations
+  - **HaveIBeenPwned Integration**: Check passwords against 600M+ compromised passwords
+  - **K-Anonymity Privacy Model**: Only first 5 characters of SHA-1 hash sent to API
+  - **Zero-Knowledge Architecture**: Your actual password never leaves your device
+  - **SHA-1 Local Hashing**: Password hashed in browser before API query
+  - **Breach Count Display**: Shows exact number of times password appeared in breaches
+  - **Immediate Action Alerts**: Clear warnings for compromised passwords
+  - **Privacy-First**: Full password hash never transmitted over network
   
 - **Password Strength Analysis**
   - Advanced strength calculation algorithm
-  - Factors: length, character variety, patterns
-  - Score-based evaluation (0-4)
-  - Detailed feedback and suggestions
+  - Factors: length, character variety, patterns, entropy
+  - Score-based evaluation (0-4): Weak, Medium, Strong, Very Strong
+  - Real-time feedback and improvement suggestions
+  - Visual strength indicators across all features
   
-- **Data Security**
-  - End-to-end encryption ready
-  - SOC2 compliant infrastructure (Appwrite)
-  - Secure session management
+- **Data Security (Appwrite Infrastructure)**
+  - **AES-128 GCM Encryption**: Industry-standard Galois/Counter Mode encryption for data at rest
+  - **Argon2 Password Hashing**: Winner of Password Hashing Competition with salt
+  - **SOC 2 Type I Certified**: Enterprise-grade security compliance
+  - **HTTPS/TLS Enforced**: All data encrypted in transit with TLS 1.3
+  - **Zero-Trust Architecture**: Every request authenticated and authorized
+  - **DDoS Protection**: Built-in protection against distributed attacks
+  - **Regular Security Audits**: Continuous monitoring and penetration testing
+  
+- **Application Security**
   - Protected routes with authentication guards
   - Automatic session timeout handling
+  - CSRF protection via Appwrite SDK
+  - XSS prevention through React's built-in escaping
+  - Secure session token management
+  - MFA enforcement for sensitive operations
 
 ### 👤 User Profile Management
 

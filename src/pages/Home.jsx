@@ -508,9 +508,9 @@ function Home() {
                       <MdWarning className="text-2xl" />
                     </div>
                     <div className="flex-1">
-                      <h4 className="font-bold text-lg mb-2">Breach Monitoring</h4>
-                      <p className="text-sm text-stone-400">Check if passwords have been compromised with detailed security recommendations</p>
-                      <span className="text-xs text-red-400 mt-2 inline-block">→ Check Breaches</span>
+                      <h4 className="font-bold text-lg mb-2">Password Breach Checker</h4>
+                      <p className="text-sm text-stone-400">Verify passwords against 600M+ breaches using HaveIBeenPwned with k-anonymity privacy</p>
+                      <span className="text-xs text-red-400 mt-2 inline-block">→ Check Passwords</span>
                     </div>
                   </div>
                 </CardContent>
