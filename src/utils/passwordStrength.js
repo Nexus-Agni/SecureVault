@@ -103,28 +103,55 @@ export function isPasswordReused(password, existingPasswords = []) {
 /**
  * Generate a random strong password
  * @param {number} length - Length of the password (default 16)
+ * @param {Object} options - Character type options
  * @returns {string} - Generated password
  */
-export function generatePassword(length = 16) {
-  const lowercase = 'abcdefghijklmnopqrstuvwxyz';
-  const uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  const numbers = '0123456789';
-  const special = '!@#$%^&*()_+-=[]{}|;:,.<>?';
-  const allChars = lowercase + uppercase + numbers + special;
+export function generatePassword(length = 16, options = {}) {
+  const {
+    uppercase = true,
+    lowercase = true,
+    numbers = true,
+    symbols = true
+  } = options;
 
+  let charSet = '';
   let password = '';
-  
-  // Ensure at least one of each type
-  password += lowercase[Math.floor(Math.random() * lowercase.length)];
-  password += uppercase[Math.floor(Math.random() * uppercase.length)];
-  password += numbers[Math.floor(Math.random() * numbers.length)];
-  password += special[Math.floor(Math.random() * special.length)];
 
-  // Fill the rest randomly
-  for (let i = password.length; i < length; i++) {
-    password += allChars[Math.floor(Math.random() * allChars.length)];
+  const lowercaseChars = 'abcdefghijklmnopqrstuvwxyz';
+  const uppercaseChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  const numberChars = '0123456789';
+  const symbolChars = '!@#$%^&*()_+-=[]{}|;:,.<>?';
+
+  // Build character set based on options
+  if (lowercase) charSet += lowercaseChars;
+  if (uppercase) charSet += uppercaseChars;
+  if (numbers) charSet += numberChars;
+  if (symbols) charSet += symbolChars;
+
+  // If no options selected, default to all
+  if (!charSet) {
+    charSet = lowercaseChars + uppercaseChars + numberChars + symbolChars;
   }
 
-  // Shuffle the password
+  // Ensure at least one of each selected type
+  if (lowercase && charSet.includes(lowercaseChars[0])) {
+    password += lowercaseChars[Math.floor(Math.random() * lowercaseChars.length)];
+  }
+  if (uppercase && charSet.includes(uppercaseChars[0])) {
+    password += uppercaseChars[Math.floor(Math.random() * uppercaseChars.length)];
+  }
+  if (numbers && charSet.includes(numberChars[0])) {
+    password += numberChars[Math.floor(Math.random() * numberChars.length)];
+  }
+  if (symbols && charSet.includes(symbolChars[0])) {
+    password += symbolChars[Math.floor(Math.random() * symbolChars.length)];
+  }
+
+  // Fill the rest randomly from the character set
+  for (let i = password.length; i < length; i++) {
+    password += charSet[Math.floor(Math.random() * charSet.length)];
+  }
+
+  // Shuffle the password to randomize character positions
   return password.split('').sort(() => Math.random() - 0.5).join('');
 }

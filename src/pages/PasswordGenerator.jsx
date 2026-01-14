@@ -20,7 +20,7 @@ function PasswordGenerator() {
   });
 
   const handleGenerate = () => {
-    const newPassword = generatePassword(length);
+    const newPassword = generatePassword(length, options);
     setPassword(newPassword);
   };
 
